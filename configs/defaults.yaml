@@ -1,0 +1,65 @@
+# Default end-to-end pipeline config.
+#
+# Each entry in `pipeline` declares one Stage to run, in the listed order.
+# The runner skips any Stage whose `is_done` returns True (resume).
+# `enabled: optional` is currently a documentation hint (still treated as
+# enabled by the runner; actual skip happens via is_done or --force).
+#
+# Phase 1 is intentionally MONOLITHIC: a single `phase1` stage wraps the
+# existing batch_pipeline.py which runs A→E in one subprocess. It is NOT
+# split into per-substage stages because Phase-A raw float32 depth (and
+# other intermediates) are in-memory-only handoffs never persisted
+# losslessly — a subprocess split would change results. See
+# docs/ARCHITECTURE.md "Backend swap".
+# Component swap is via the backend registry: set EGOINFINITY_<ROLE>_BACKEND
+# (or `egoinfinity process --depth-backend <name>`) and re-run phase1.
+
+artifacts_dir: ./artifacts
+
+pipeline:
+  # ── Frame prep ────────────────────────────────────────────────────────
+  - { name: extract_frames }
+  # filter is opt-in: only useful for raw-video corpus screening (needs YOLO
+  # weights). Off by default so import-pkl flows don't require setup_weights.sh.
+  - { name: filter,         enabled: false, args: { hard_gate: false } }
+
+  # ── Phase 1: detection + tracking (monolithic) ───────────────────────
+  - { name: phase1, args: { hand_tta: false, low_vram: false, run_sam3d: true, run_track: true, with_sam3d_worker: false } }
+
+  # ── Depth refinement (opt-in; Flow3R-stable + MoGe-2-metric fused depth)
+  # Requires Flow3R sibling repo. Enable via --set 'flow3r_depth.enabled=true'
+  # or by editing this config. See egoinfinity/pipeline/flow3r_depth.py for setup.
+  - { name: flow3r_depth, enabled: false }
+
+  # ── Phase 3: post-tracking canonical 8-stage sequence ────────────────
+  # Order matches dev pkl provenance (5/28 timestamps observed across 5 clips):
+  #   p1 -> veto -> p2 -> align -> smooth -> bake -> scale_sanity -> spurious
+  - { name: pose_track_p1,  backend: phase_d }
+  - { name: grasp_veto }
+  - { name: pose_track_p2,  backend: phase_d_preserve_veto }
+  - { name: depth_align }
+  - { name: depth_smooth }
+  - { name: bake_fp,        enabled: optional }   # requires FP++ pose.npy externally produced
+  - { name: scale_sanity }
+  - { name: spurious,       backend: soft }
+
+  # ── Retarget bridge (off by default; enabled by `--robot <name>` CLI flag).
+  #   export_retarget_samples writes the 4 files that retarget/utils/clip_io.py
+  #   SamplesSequence consumes; retarget then subprocess-invokes
+  #   retarget/scripts/test.py for the chosen robot.
+  - { name: export_retarget_samples, enabled: false }
+  - { name: retarget,                enabled: false, backend: g1 }
+
+  # ── Phase-1-internal re-runs (opt-in; NOT part of the default flow) ──────
+  # phase1 already produces these; each re-runs ONE substep on an existing
+  # pkl (e.g. cross-host SAM3D fill). enabled: false so `process` skips them;
+  # invoke explicitly via `egoinfinity run <name> <clip>`. See docs/MULTI_HOST.md.
+  - { name: refresh_sam3d,        enabled: false }
+  - { name: refresh_hands,        enabled: false }
+  - { name: refresh_hand_scale,   enabled: false }
+  - { name: refresh_optical_flow, enabled: false }
+
+resume:
+  policy: auto              # "auto": skip done stages; "never": full re-run
+  force_stages: []
+  cascade_force: false

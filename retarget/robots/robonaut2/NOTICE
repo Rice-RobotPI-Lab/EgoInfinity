@@ -1,0 +1,15 @@
+Robonaut 2 model assets — third-party attribution
+
+These MJCF / mesh assets derive from NASA's Robonaut 2 (R2) robot model.
+
+Upstream:  NASA JSC Robotics — r2_description
+           https://gitlab.com/nasa-jsc-robotics/r2_description
+           (mirror: https://github.com/gkjohnson/nasa-urdf-robots)
+License:   NASA Open Source Agreement (NOSA) v1.3
+           Full text: https://opensource.org/licenses/NASA-1.3
+           OSI-approved; redistribution permitted with attribution and with
+           modifications noted (NOSA section 3.G).
+
+EgoInfinity modifications (NOSA 3.G): converted from the upstream URDF to
+MuJoCo MJCF (r2.xml, r2_mjx.xml, scene_vis.xml) and re-exported meshes to
+.obj; trimmed for retargeting.

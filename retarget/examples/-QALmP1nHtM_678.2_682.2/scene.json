@@ -1,0 +1,314 @@
+{
+  "id": "-QALmP1nHtM_678.2_682.2",
+  "fps": 15.78947368421049,
+  "duration": 3.990000000000009,
+  "video_source": {
+    "type": "youtube",
+    "youtube_id": "-QALmP1nHtM",
+    "start_seconds": 678.21,
+    "end_seconds": 682.2,
+    "url": "https://youtube.com/watch?v=-QALmP1nHtM&t=678",
+    "embed_blocked": false
+  },
+  "action100m_metadata": {
+    "action_brief": "Carve turkey",
+    "action_detailed": "Carve the cooked turkey on the plate using the large knife in your right hand, cutting steadily across the meat while the fork remains steady beside it.",
+    "actor": "The woman wearing a white apron with black and red crosses",
+    "summary": "The woman stands at a kitchen countertop wearing a white apron marked with black and red crosses. Holding a large knife in her right hand, she slices the roasted turkey that lies on a white rectangular plate to her left, moving the blade in a steady horizontal motion. A fork rests beside the turkey on the plate, and a large white bowl is positioned to the right. Behind her, a ceramic vase of red flowers sits on the counter, and the backsplash shows a yellow\u2011bordered mosaic of black tiles with a white vent above it.",
+    "video_title": null,
+    "video_duration": null,
+    "segment_id": 504891,
+    "level": null,
+    "favorited_at": null,
+    "source_dataset": "Action100M",
+    "license": "fair-noncommercial-research-license-v1"
+  },
+  "camera": {
+    "focal": 897.5683279037476,
+    "cx": 427.0,
+    "cy": 240.0,
+    "width": 854,
+    "height": 480,
+    "gravity_up": [
+      -0.009941314347088337,
+      -0.9973517060279846,
+      -0.07204744219779968
+    ]
+  },
+  "reconstruction": {
+    "hand_joints": "hand_joints.bin",
+    "hand_joints_2d": "hand_joints_2d.bin",
+    "hand_verts": "hand_verts.bin",
+    "hand_faces": "hand_faces.bin",
+    "hand_meta": "hand_meta.json",
+    "objects": [
+      {
+        "id": 0,
+        "prompt": "turkey",
+        "color_hex": "#d97757",
+        "ply": "objects/obj_0.ply",
+        "n_points": 72288,
+        "scale_correction": 0.28532156348228455,
+        "tracker_ok": true,
+        "canonical_translation": [
+          0.3314334452152252,
+          -0.23114000260829926,
+          1.2765491008758545
+        ],
+        "canonical_rotation_quat": [
+          0.32150205969810486,
+          0.3353433609008789,
+          0.6310442090034485,
+          0.621260404586792
+        ],
+        "canonical_scale": 0.28532156348228455
+      },
+      {
+        "id": 1,
+        "prompt": "white bowl",
+        "color_hex": "#6a9460",
+        "ply": "objects/obj_1.ply",
+        "n_points": 60236,
+        "scale_correction": 0.24755853414535522,
+        "tracker_ok": true,
+        "canonical_translation": [
+          -0.2592910826206207,
+          -0.24135905504226685,
+          1.357324242591858
+        ],
+        "canonical_rotation_quat": [
+          0.011714954860508442,
+          0.03912119194865227,
+          0.7430140972137451,
+          0.668028712272644
+        ],
+        "canonical_scale": 0.24755853414535522
+      },
+      {
+        "id": 2,
+        "prompt": "white plate of sliced turkey",
+        "color_hex": "#5a7daa",
+        "ply": "objects/obj_2.ply",
+        "n_points": 38436,
+        "scale_correction": 0.3072572946548462,
+        "tracker_ok": true,
+        "canonical_translation": [
+          0.010322492569684982,
+          -0.29194480180740356,
+          1.3457398414611816
+        ],
+        "canonical_rotation_quat": [
+          0.4834126830101013,
+          0.5388210415840149,
+          0.5064452290534973,
+          0.46850523352622986
+        ],
+        "canonical_scale": 0.3072572946548462
+      },
+      {
+        "id": 3,
+        "prompt": "white plate",
+        "color_hex": "#c89968",
+        "ply": "objects/obj_3.ply",
+        "n_points": 35980,
+        "scale_correction": 0.28682565689086914,
+        "tracker_ok": true,
+        "canonical_translation": [
+          0.34338194131851196,
+          -0.27677008509635925,
+          1.3212804794311523
+        ],
+        "canonical_rotation_quat": [
+          0.4474591612815857,
+          0.4960162341594696,
+          0.5319616794586182,
+          0.5203508734703064
+        ],
+        "canonical_scale": 0.28682565689086914
+      },
+      {
+        "id": 4,
+        "prompt": "knife",
+        "color_hex": "#7a8c4a",
+        "ply": "objects/obj_4.ply",
+        "n_points": 4920,
+        "scale_correction": 0.2265039086341858,
+        "tracker_ok": true,
+        "canonical_translation": [
+          -0.0023067500442266464,
+          -0.18745669722557068,
+          1.37550950050354
+        ],
+        "canonical_rotation_quat": [
+          0.11120911687612534,
+          0.43020081520080566,
+          0.8759879469871521,
+          -0.18762977421283722
+        ],
+        "canonical_scale": 0.2265039086341858
+      }
+    ],
+    "object_pose_traj": "object_pose.bin",
+    "object_pose_shape": [
+      63,
+      5,
+      4,
+      4
+    ],
+    "object_obb": "object_obb.bin",
+    "object_obb_shape": [
+      5,
+      8,
+      3
+    ],
+    "depth_video": "depth.mp4",
+    "flow_video": "flow.mp4",
+    "mask_video": "mask.mp4",
+    "signals": "signals.json",
+    "thumb": "thumb.jpg",
+    "raw": {
+      "depth_npz": "depth.npz",
+      "depth_unit": "millimeter",
+      "depth_dtype": "uint16",
+      "depth_shape": [
+        63,
+        480,
+        854
+      ],
+      "masks_npz": "masks.npz",
+      "masks_meta": {
+        "shape": [
+          63,
+          480,
+          854
+        ],
+        "oids": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "decode": "np.unpackbits(arr[oid_K][t])[: H*W].reshape(H, W).astype(bool)"
+      },
+      "bg_template": "bg_template.png",
+      "pose_track": "pose_track.json"
+    }
+  },
+  "stats": {
+    "n_frames": 63,
+    "n_objects": 5,
+    "has_grasp": true,
+    "mean_trust": null,
+    "mean_iou": null,
+    "sam3_quality": 0.9470818707616209
+  },
+  "tracking_summary": {
+    "1": {
+      "path": null,
+      "tracking_status": "ok",
+      "state_counts": {
+        "static": 63,
+        "grasped_l": 0,
+        "grasped_r": 0,
+        "grasped_both": 0,
+        "moving": 0
+      },
+      "state_fractions": {
+        "static": 1.0,
+        "grasped": 0.0,
+        "moving": 0.0
+      },
+      "is_static_global": true,
+      "n_state_frames": 63,
+      "dominant_hand": null,
+      "mesh_n_pts": 60236,
+      "mesh_extent_cm": 24.466402383246688
+    },
+    "2": {
+      "path": null,
+      "tracking_status": "ok",
+      "state_counts": {
+        "static": 63,
+        "grasped_l": 0,
+        "grasped_r": 0,
+        "grasped_both": 0,
+        "moving": 0
+      },
+      "state_fractions": {
+        "static": 1.0,
+        "grasped": 0.0,
+        "moving": 0.0
+      },
+      "is_static_global": false,
+      "n_state_frames": 63,
+      "dominant_hand": null,
+      "mesh_n_pts": 38436,
+      "mesh_extent_cm": 30.483565778643396
+    },
+    "3": {
+      "path": null,
+      "tracking_status": "ok",
+      "state_counts": {
+        "static": 63,
+        "grasped_l": 0,
+        "grasped_r": 0,
+        "grasped_both": 0,
+        "moving": 0
+      },
+      "state_fractions": {
+        "static": 1.0,
+        "grasped": 0.0,
+        "moving": 0.0
+      },
+      "is_static_global": true,
+      "n_state_frames": 63,
+      "dominant_hand": null,
+      "mesh_n_pts": 35980,
+      "mesh_extent_cm": 28.488003906788606
+    },
+    "0": {
+      "path": null,
+      "tracking_status": "ok",
+      "state_counts": {
+        "static": 63,
+        "grasped_l": 0,
+        "grasped_r": 0,
+        "grasped_both": 0,
+        "moving": 0
+      },
+      "state_fractions": {
+        "static": 1.0,
+        "grasped": 0.0,
+        "moving": 0.0
+      },
+      "is_static_global": true,
+      "n_state_frames": 63,
+      "dominant_hand": null,
+      "mesh_n_pts": 72288,
+      "mesh_extent_cm": 28.29546001431069
+    },
+    "4": {
+      "path": null,
+      "tracking_status": "ok",
+      "state_counts": {
+        "static": 0,
+        "grasped_l": 0,
+        "grasped_r": 63,
+        "grasped_both": 0,
+        "moving": 0
+      },
+      "state_fractions": {
+        "static": 0.0,
+        "grasped": 1.0,
+        "moving": 0.0
+      },
+      "is_static_global": false,
+      "n_state_frames": 63,
+      "dominant_hand": "R",
+      "mesh_n_pts": 4920,
+      "mesh_extent_cm": 22.47108624063987
+    }
+  },
+  "_license": "This sample is a derivative work of Action100M and is distributed under FAIR Noncommercial Research License v1. See LICENSE-Action100M for terms."
+}

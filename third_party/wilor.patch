@@ -1,0 +1,129 @@
+--- a/models/__init__.py
++++ b/models/__init__.py
+@@ -26,10 +26,12 @@
+         # Update config to be compatible with demo
+ 
+     if ('DATA_DIR' in model_cfg.MANO):
++        _wilor_root = str(Path(__file__).resolve().parent.parent)
++        _mano_dir = _wilor_root + '/mano_data/'
+         model_cfg.defrost()
+-        model_cfg.MANO.DATA_DIR    = './mano_data/'
+-        model_cfg.MANO.MODEL_PATH  = './mano_data/'
+-        model_cfg.MANO.MEAN_PARAMS = './mano_data/mano_mean_params.npz'
++        model_cfg.MANO.DATA_DIR    = _mano_dir
++        model_cfg.MANO.MODEL_PATH  = _mano_dir
++        model_cfg.MANO.MEAN_PARAMS = _mano_dir + 'mano_mean_params.npz'
+         model_cfg.freeze()
+ 
+     model = WiLoR.load_from_checkpoint(checkpoint_path, strict=False, cfg=model_cfg)
+--- a/models/backbones/vit.py
++++ b/models/backbones/vit.py
+@@ -90,7 +90,7 @@
+ class Attention(nn.Module):
+     def __init__(
+             self, dim, num_heads=8, qkv_bias=False, qk_scale=None, attn_drop=0.,
+-            proj_drop=0., attn_head_dim=None, ):
++            proj_drop=0., attn_head_dim=None,):
+         super().__init__()
+         self.num_heads = num_heads
+         head_dim = dim // num_heads
+@@ -104,7 +104,7 @@
+ 
+         self.qkv = nn.Linear(dim, all_head_dim * 3, bias=qkv_bias)
+ 
+-        self.attn_drop = attn_drop
++        self.attn_drop = nn.Dropout(attn_drop)
+         self.proj = nn.Linear(all_head_dim, dim)
+         self.proj_drop = nn.Dropout(proj_drop)
+ 
+@@ -112,15 +112,20 @@
+         B, N, C = x.shape
+         qkv = self.qkv(x)
+         qkv = qkv.reshape(B, N, 3, self.num_heads, -1).permute(2, 0, 3, 1, 4)
+-        q, k, v = qkv[0], qkv[1], qkv[2]
++        q, k, v = qkv[0], qkv[1], qkv[2]   # make torchscript happy (cannot use tensor as tuple)
+ 
+-        attn = F.scaled_dot_product_attention(q, k, v, attn_mask=None, dropout_p=self.attn_drop)
++        q = q * self.scale
++        attn = (q @ k.transpose(-2, -1))
+ 
+-        x = attn.transpose(1, 2).reshape(B, N, -1)
++        attn = attn.softmax(dim=-1)
++        attn = self.attn_drop(attn)
++
++        x = (attn @ v).transpose(1, 2).reshape(B, N, -1)
+         x = self.proj(x)
+         x = self.proj_drop(x)
+ 
+         return x
++
+ class Block(nn.Module):
+ 
+     def __init__(self, dim, num_heads, mlp_ratio=4., qkv_bias=False, qk_scale=None, 
+@@ -224,8 +229,6 @@
+         self.freeze_attn = freeze_attn
+         self.freeze_ffn = freeze_ffn
+         self.depth = depth
+-        self.blocks_to_skip = [25, 27, 26, 23, 24, 29, 22, 13, 14, 15, 20]
+-        self.skip_blocks  = False 
+ 
+         if hybrid_backbone is not None:
+             self.patch_embed = HybridEmbed(
+@@ -360,9 +363,7 @@
+         cam_tokens   = self.cam_emb(self.init_cam).unsqueeze(1).repeat(B, 1, 1)
+         
+         x = torch.cat([pose_tokens, shape_tokens, cam_tokens, x], 1)
+-        for i, blk in enumerate(self.blocks):
+-            if self.skip_blocks and i in self.blocks_to_skip[:5]:
+-                continue 
++        for blk in self.blocks:
+             if self.use_checkpoint:
+                 x = checkpoint.checkpoint(blk, x)
+             else:
+--- a/models/wilor.py
++++ b/models/wilor.py
+@@ -121,7 +121,7 @@
+         temp_mano_params['global_orient'] = temp_mano_params['global_orient'].reshape(batch_size, -1, 3, 3)
+         temp_mano_params['hand_pose'] = temp_mano_params['hand_pose'].reshape(batch_size, -1, 3, 3)
+         temp_mano_params['betas'] = temp_mano_params['betas'].reshape(batch_size, -1)
+-        temp_mano_output  = self.mano(**{k: v for k,v in temp_mano_params.items()}, pose2rot=False)
++        temp_mano_output  = self.mano(**{k: v.float() for k,v in temp_mano_params.items()}, pose2rot=False)
+         #temp_keypoints_3d = temp_mano_output.joints
+         temp_vertices     = temp_mano_output.vertices
+ 
+@@ -143,7 +143,7 @@
+         pred_mano_params['global_orient'] = pred_mano_params['global_orient'].reshape(batch_size, -1, 3, 3)
+         pred_mano_params['hand_pose'] = pred_mano_params['hand_pose'].reshape(batch_size, -1, 3, 3)
+         pred_mano_params['betas'] = pred_mano_params['betas'].reshape(batch_size, -1)
+-        mano_output = self.mano(**{k: v for k,v in pred_mano_params.items()}, pose2rot=False)
++        mano_output = self.mano(**{k: v.float() for k,v in pred_mano_params.items()}, pose2rot=False)
+         pred_keypoints_3d = mano_output.joints
+         pred_vertices = mano_output.vertices
+   
+--- a/datasets/vitdet_dataset.py
++++ b/datasets/vitdet_dataset.py
+@@ -22,12 +22,10 @@
+                  right: np.array,
+                  rescale_factor=2.5,
+                  train: bool = False,
+-                 fp16: bool = False,  
+                  **kwargs):
+         super().__init__()
+         self.cfg = cfg
+         self.img_cv2 = img_cv2
+-        self.fp16 = fp16
+         # self.boxes = boxes
+ 
+         assert train == False, "ViTDetDataset is only for inference"
+@@ -85,10 +83,7 @@
+         # apply normalization
+         for n_c in range(min(self.img_cv2.shape[2], 3)):
+             img_patch[n_c, :, :] = (img_patch[n_c, :, :] - self.mean[n_c]) / self.std[n_c]
+-        
+-        if self.fp16:
+-            img_patch = torch.from_numpy(img_patch).half()
+-            
++
+         item = {
+             'img': img_patch,
+             'personid': int(self.personid[idx]),

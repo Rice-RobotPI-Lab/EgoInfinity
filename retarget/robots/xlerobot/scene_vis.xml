@@ -1,0 +1,23 @@
+<mujoco model="xlerobot_scene">
+  <include file="xlerobot.xml"/>
+
+  <statistic center="0.05 0.03 0.60" extent="0.75"/>
+
+  <visual>
+    <headlight diffuse="0.0 0.0 0.0" ambient="0.45 0.45 0.45" specular="0.0 0.0 0.0"/>
+    <quality shadowsize="0"/>
+    <rgba haze="1 1 1 1"/>
+    <global offwidth="1920" offheight="1920" azimuth="140" elevation="-20"/>
+  </visual>
+
+  <asset>
+    <texture type="skybox" builtin="gradient" rgb1="1 1 1" rgb2="1 1 1" width="512" height="3072"/>
+    <texture type="2d" name="groundplane" builtin="flat" rgb1="1 1 1" width="300" height="300"/>
+    <material name="groundplane" texture="groundplane" texuniform="true" texrepeat="5 5" reflectance="0.0"/>
+  </asset>
+
+  <worldbody>
+    <light pos="1 -1 3.0" dir="-0.5 0.5 -0.8" directional="true" diffuse="1.0 1.0 1.0" specular="0.0 0.0 0.0"/>
+    <light pos="-1 1 3.0" dir="0.4 -0.3 -0.6" directional="true" diffuse="0.55 0.55 0.55" specular="0.0 0.0 0.0"/>
+  </worldbody>
+</mujoco>

@@ -1,0 +1,12 @@
+XLeRobot model assets — third-party attribution
+
+These MJCF / mesh assets were converted from the XLeRobot URDF distributed
+with ManiSkill (the xlerobot.xml header records: "Converted from URDF:
+simulation/Maniskill/assets/xlerobot/xlerobot.urdf").
+
+Upstream:  https://github.com/haosulab/ManiSkill   (assets/xlerobot)
+License:   Apache-2.0 — see ./LICENSE (copied from ManiSkill).
+
+NOTE (verify before public release): XLeRobot originates as its own project
+that ManiSkill packages; confirm whether the original XLeRobot distribution
+imposes terms beyond ManiSkill's Apache-2.0 and, if so, add them here.

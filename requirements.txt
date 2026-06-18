@@ -1,0 +1,33 @@
+# Core
+numpy
+opencv-python
+torch
+torchvision
+scipy
+Pillow
+pyyaml
+
+# WiLoR (vendored in third_party/wilor/)
+pytorch-lightning
+smplx==0.1.28
+yacs
+timm
+einops
+hydra-core
+omegaconf
+rich
+scikit-image
+pyrender
+trimesh
+
+# YOLO hand detector
+ultralytics==8.1.34
+
+# MoGe-2 (also needs: pip install git+https://github.com/microsoft/MoGe.git)
+# GeoCalib (also needs: pip install git+https://github.com/cvg/GeoCalib.git)
+
+# Video I/O (retarget depth.mp4 export, Action100M streaming)
+imageio-ffmpeg
+
+# Visualization
+viser>=0.2.0

@@ -1,0 +1,24 @@
+Hand motion infiller — algorithm adapted from HaWoR
+
+The Python files in this directory (`network.py`, `filling.py`,
+`rotation.py`) are derived from the HaWoR motion infiller reference
+implementation, with EgoInfinity-side adaptations described below.
+
+Upstream:  https://github.com/ThunderVVV/HaWoR
+Citation:  Zhang, J., et al. "HaWoR: World-Space Hand Motion
+            Reconstruction from Egocentric Videos." CVPR 2025.
+
+EgoInfinity adaptations:
+- Self-contained re-pack of the infiller submodule (removes the
+  unnecessary MANO dependency at infill time; uses our existing
+  WiLoR-loaded MANO).
+- File-level docstrings record which upstream file each module was
+  derived from (see top of each .py).
+
+Please consult the HaWoR repository for the upstream license terms.
+If the upstream license file is not present here, treat this code as
+"derived from HaWoR" and respect HaWoR's published terms.
+
+The HaWoR infiller weight (infiller.pt) is downloaded from the upstream
+HuggingFace repo (ThunderVVV/HaWoR) by scripts/setup_weights.sh into
+${EGOINFINITY_CKPT_DIR}/infiller.pt; it is NOT redistributed by this repo.

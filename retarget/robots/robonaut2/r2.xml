@@ -1,0 +1,561 @@
+<mujoco model="r2">
+  <compiler angle="radian" meshdir="meshes/" />
+  <asset>
+    <mesh name="Stanchion_Baseplate_material_1" file="Stanchion_Baseplate_material_1.obj" />
+    <mesh name="Stanchion_Baseplate_material_3" file="Stanchion_Baseplate_material_3.obj" />
+    <mesh name="Stanchion_Baseplate_material_5" file="Stanchion_Baseplate_material_5.obj" />
+    <mesh name="Stanchion_Baseplate_material_7" file="Stanchion_Baseplate_material_7.obj" />
+    <mesh name="Stanchion_material_1" file="Stanchion_material_1.obj" />
+    <mesh name="Stanchion_material_3" file="Stanchion_material_3.obj" />
+    <mesh name="Stanchion_material_5" file="Stanchion_material_5.obj" />
+    <mesh name="Stanchion_material_7" file="Stanchion_material_7.obj" />
+    <mesh name="Stanchion_material_9" file="Stanchion_material_9.obj" />
+    <mesh name="Stanchion_material_11" file="Stanchion_material_11.obj" />
+    <mesh name="Stanchion_material_13" file="Stanchion_material_13.obj" />
+    <mesh name="Stanchion_material_15" file="Stanchion_material_15.obj" />
+    <mesh name="Stanchion_material_17" file="Stanchion_material_17.obj" />
+    <mesh name="Stanchion_material_19" file="Stanchion_material_19.obj" />
+    <mesh name="Stanchion_material_21" file="Stanchion_material_21.obj" />
+    <mesh name="Stanchion_material_23" file="Stanchion_material_23.obj" />
+    <mesh name="Stanchion_Baseplate" file="Stanchion_Baseplate.obj" />
+    <mesh name="Body_material_1" file="Body_material_1.obj" />
+    <mesh name="Body_material_3" file="Body_material_3.obj" />
+    <mesh name="Backpack" file="Backpack.obj" />
+    <mesh name="Body_Cover" file="Body_Cover.obj" />
+    <mesh name="Body" file="Body.obj" />
+    <mesh name="Left_Shoulder_Upper" file="Left_Shoulder_Upper.obj" />
+    <mesh name="Left_Shoulder_Lower" file="Left_Shoulder_Lower.obj" />
+    <mesh name="Left_Upper_Arm" file="Left_Upper_Arm.obj" />
+    <mesh name="Left_Elbow" file="Left_Elbow.obj" />
+    <mesh name="Left_Forearm" file="Left_Forearm.obj" />
+    <mesh name="Left_Palm" file="Left_Palm.obj" />
+    <mesh name="Finger_Proximal" file="Finger_Proximal.obj" />
+    <mesh name="Finger_Mid" file="Finger_Mid.obj" />
+    <mesh name="Finger_Dist" file="Finger_Dist.obj" />
+    <mesh name="Left_Thumb_Carp" file="Left_Thumb_Carp.obj" />
+    <mesh name="Left_Thumb_MtCar" file="Left_Thumb_MtCar.obj" />
+    <mesh name="Thumb_Proximal" file="Thumb_Proximal.obj" />
+    <mesh name="Thumb_Dist" file="Thumb_Dist.obj" />
+    <mesh name="Right_Shoulder_Upper" file="Right_Shoulder_Upper.obj" />
+    <mesh name="Right_Shoulder_Lower" file="Right_Shoulder_Lower.obj" />
+    <mesh name="Right_Upper_Arm" file="Right_Upper_Arm.obj" />
+    <mesh name="Right_Elbow" file="Right_Elbow.obj" />
+    <mesh name="Right_Forearm" file="Right_Forearm.obj" />
+    <mesh name="Right_Palm" file="Right_Palm.obj" />
+    <mesh name="Finger_Proximal_2" file="Finger_Proximal.obj" scale="0.9 0.9 0.9" />
+    <mesh name="Finger_Mid_2" file="Finger_Mid.obj" scale="0.9 0.9 0.9" />
+    <mesh name="Finger_Dist_2" file="Finger_Dist.obj" scale="0.9 0.9 0.9" />
+    <mesh name="Left_Thumb_Carp_2" file="Left_Thumb_Carp.obj" scale="0.9 0.9 0.9" />
+    <mesh name="Right_Thumb_MtCar" file="Right_Thumb_MtCar.obj" />
+    <mesh name="Right_Thumb_MtCar_2" file="Right_Thumb_MtCar.obj" scale="0.9 0.9 0.9" />
+    <mesh name="Neck_Lower" file="Neck_Lower.obj" />
+    <mesh name="Neck_Upper" file="Neck_Upper.obj" />
+    <mesh name="Head_material_1" file="Head_material_1.obj" />
+    <mesh name="Head_material_3" file="Head_material_3.obj" />
+    <mesh name="Head_material_5" file="Head_material_5.obj" />
+    <mesh name="Head_material_7" file="Head_material_7.obj" />
+    <mesh name="Head_material_9" file="Head_material_9.obj" />
+    <mesh name="Head" file="Head.obj" />
+    <material name="r2_waist_center_mat_2_2" texture="R2_backpack" rgba="1 1 1 1"/>
+    <material name="r2_waist_center_mat_3" texture="R2_Body_Cover" rgba="1 1 1 1"/>
+    <material name="r2_left_shoulder_roll_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_left_shoulder_pitch_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_left_upper_arm_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_left_elbow_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_left_lower_arm_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_left_wrist_yaw_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_left_index_proximal_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_left_index_medial_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_left_index_distal_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_left_middle_proximal_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_left_middle_medial_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_left_middle_distal_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_left_little_proximal_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_left_little_medial_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_left_little_distal_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_left_ring_proximal_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_left_ring_medial_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_left_ring_distal_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_left_thumb_base_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_left_thumb_medial_prime_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_left_thumb_medial_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_left_thumb_distal_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_right_shoulder_roll_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_right_shoulder_pitch_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_right_upper_arm_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_right_elbow_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_right_lower_arm_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_right_wrist_yaw_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_right_index_proximal_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_right_index_medial_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_right_index_distal_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_right_middle_proximal_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_right_middle_medial_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_right_middle_distal_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_right_little_proximal_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_right_little_medial_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_right_little_distal_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_right_ring_proximal_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_right_ring_medial_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_right_ring_distal_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_right_thumb_base_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_right_thumb_medial_prime_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_right_thumb_medial_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_right_thumb_distal_mat" texture="R2_Arm" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_neck_base_mat" texture="gold" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_neck_lower_pitch_mat" texture="gold" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_robot_world_mat_1" texture="StanchionBaseplate" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_robot_world_mat_2" texture="StanchionDovetail" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_robot_world_mat_3" texture="BrushedMetalGray" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_robot_world_mat_4" texture="StanchionKnob" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_robot_world_mat_2_1" texture="R2_Stanchion_3_Col_256" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_robot_world_mat_2_2" texture="R2_Stanchion_12_Col_256" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_robot_world_mat_2_3" texture="R2_Stanchion_8_Col_256" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_robot_world_mat_2_4" texture="R2_Stanchion_9_Col_256" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_robot_world_mat_2_5" texture="R2_Stanchion_10_Col_256" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_robot_world_mat_2_6" texture="R2_Stanchion_11_Col_256" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_robot_world_mat_2_7" texture="R2_Stanchion_5_Col_256" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_robot_world_mat_2_8" texture="R2_Stanchion_4_Col_256" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_robot_world_mat_2_9" texture="R2_Stanchion_7_Col_256" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_robot_world_mat_2_10" texture="R2_Stanchion_6_Col_256" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_robot_world_mat_2_11" texture="R2_Stanchion_2_Col_256" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_robot_world_mat_2_12" texture="R2_Stanchion_Col_512_Proj" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_waist_center_mat_1" texture="gold" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_waist_center_mat_2" texture="notexture" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_neck_roll_mat_1" texture="light_shield" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_neck_roll_mat_2" texture="gold" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_neck_roll_mat_3" texture="helmet_back" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_neck_roll_mat_4" texture="visor" rgba="1 1 1 1" specular="0"/>
+    <material name="r2_neck_roll_mat_5" texture="helmet_front" rgba="1 1 1 1" specular="0"/>
+    <texture name="R2_Arm"                   type="2d" file="textures/R2_Arm.png"/>
+    <texture name="BrushedMetalGray"          type="2d" file="textures/BrushedMetalGray.png"/>
+    <texture name="gold"                      type="2d" file="textures/gold.png"/>
+    <texture name="notexture"                 type="2d" file="textures/notexture.png"/>
+    <texture name="R2_backpack"               type="2d" file="textures/R2_backpack.png"/>
+    <texture name="R2_Body_Cover"             type="2d" file="textures/R2_Body_Cover.png"/>
+    <texture name="light_shield"              type="2d" file="textures/light_shield.png"/>
+    <texture name="helmet_back"               type="2d" file="textures/helmet_back.png"/>
+    <texture name="visor"                     type="2d" file="textures/visor.png"/>
+    <texture name="helmet_front"              type="2d" file="textures/helmet_front.png"/>
+    <texture name="StanchionBaseplate"        type="2d" file="textures/StanchionBaseplate.png"/>
+    <texture name="StanchionDovetail"         type="2d" file="textures/StanchionDovetail.png"/>
+    <texture name="StanchionKnob"             type="2d" file="textures/StanchionKnob.png"/>
+    <texture name="R2_Stanchion_Col_512_Proj" type="2d" file="textures/R2_Stanchion_Col_512_Proj.png"/>
+    <texture name="R2_Stanchion_2_Col_256"    type="2d" file="textures/R2_Stanchion_2_Col_256.png"/>
+    <texture name="R2_Stanchion_3_Col_256"    type="2d" file="textures/R2_Stanchion_3_Col_256.png"/>
+    <texture name="R2_Stanchion_4_Col_256"    type="2d" file="textures/R2_Stanchion_4_Col_256.png"/>
+    <texture name="R2_Stanchion_5_Col_256"    type="2d" file="textures/R2_Stanchion_5_Col_256.png"/>
+    <texture name="R2_Stanchion_6_Col_256"    type="2d" file="textures/R2_Stanchion_6_Col_256.png"/>
+    <texture name="R2_Stanchion_7_Col_256"    type="2d" file="textures/R2_Stanchion_7_Col_256.png"/>
+    <texture name="R2_Stanchion_8_Col_256"    type="2d" file="textures/R2_Stanchion_8_Col_256.png"/>
+    <texture name="R2_Stanchion_9_Col_256"    type="2d" file="textures/R2_Stanchion_9_Col_256.png"/>
+    <texture name="R2_Stanchion_10_Col_256"   type="2d" file="textures/R2_Stanchion_10_Col_256.png"/>
+    <texture name="R2_Stanchion_11_Col_256"   type="2d" file="textures/R2_Stanchion_11_Col_256.png"/>
+    <texture name="R2_Stanchion_12_Col_256"   type="2d" file="textures/R2_Stanchion_12_Col_256.png"/>
+  </asset>
+
+  <worldbody>
+    <body name="/r2/robot_world" pos="0 0 0">
+      <inertial pos="0 0 0.625017" mass="56.01" fullinertia="14.6261 14.6252 12.001 -0.0000035834 -0.0000000057 -0.0000014334"/>
+      <geom pos="0 0 0" quat="0.0005633 0.0005629 0.706825 0.707388" group="1" contype="0" conaffinity="0" material="r2_robot_world_mat_1" type="mesh" mesh="Stanchion_Baseplate_material_1" />
+      <geom pos="0 0 0" quat="0.0005633 0.0005629 0.706825 0.707388" group="1" contype="0" conaffinity="0" material="r2_robot_world_mat_2" type="mesh" mesh="Stanchion_Baseplate_material_3" />
+      <geom pos="0 0 0" quat="0.0005633 0.0005629 0.706825 0.707388" group="1" contype="0" conaffinity="0" material="r2_robot_world_mat_3" type="mesh" mesh="Stanchion_Baseplate_material_5" />
+      <geom pos="0 0 0" quat="0.0005633 0.0005629 0.706825 0.707388" group="1" contype="0" conaffinity="0" material="r2_robot_world_mat_4" type="mesh" mesh="Stanchion_Baseplate_material_7" />
+      <geom pos="0 0 0.7" quat="0.70626 0 0 -0.7079526" group="1" contype="0" conaffinity="0" material="r2_robot_world_mat_2_1" type="mesh" mesh="Stanchion_material_1" />
+      <geom pos="0 0 0.7" quat="0.70626 0 0 -0.7079526" group="1" contype="0" conaffinity="0" material="r2_robot_world_mat_2_2" type="mesh" mesh="Stanchion_material_3" />
+      <geom pos="0 0 0.7" quat="0.70626 0 0 -0.7079526" group="1" contype="0" conaffinity="0" material="r2_robot_world_mat_2_3" type="mesh" mesh="Stanchion_material_5" />
+      <geom pos="0 0 0.7" quat="0.70626 0 0 -0.7079526" group="1" contype="0" conaffinity="0" material="r2_robot_world_mat_2_4" type="mesh" mesh="Stanchion_material_7" />
+      <geom pos="0 0 0.7" quat="0.70626 0 0 -0.7079526" group="1" contype="0" conaffinity="0" material="r2_robot_world_mat_2_5" type="mesh" mesh="Stanchion_material_9" />
+      <geom pos="0 0 0.7" quat="0.70626 0 0 -0.7079526" group="1" contype="0" conaffinity="0" material="r2_robot_world_mat_2_6" type="mesh" mesh="Stanchion_material_11" />
+      <geom pos="0 0 0.7" quat="0.70626 0 0 -0.7079526" group="1" contype="0" conaffinity="0" material="r2_robot_world_mat_2_7" type="mesh" mesh="Stanchion_material_13" />
+      <geom pos="0 0 0.7" quat="0.70626 0 0 -0.7079526" group="1" contype="0" conaffinity="0" material="r2_robot_world_mat_2_8" type="mesh" mesh="Stanchion_material_15" />
+      <geom pos="0 0 0.7" quat="0.70626 0 0 -0.7079526" group="1" contype="0" conaffinity="0" material="r2_robot_world_mat_2_9" type="mesh" mesh="Stanchion_material_17" />
+      <geom pos="0 0 0.7" quat="0.70626 0 0 -0.7079526" group="1" contype="0" conaffinity="0" material="r2_robot_world_mat_2_10" type="mesh" mesh="Stanchion_material_19" />
+      <geom pos="0 0 0.7" quat="0.70626 0 0 -0.7079526" group="1" contype="0" conaffinity="0" material="r2_robot_world_mat_2_11" type="mesh" mesh="Stanchion_material_21" />
+      <geom pos="0 0 0.7" quat="0.70626 0 0 -0.7079526" group="1" contype="0" conaffinity="0" material="r2_robot_world_mat_2_12" type="mesh" mesh="Stanchion_material_23" />
+      <geom pos="0 0 0" quat="0.0005633 0.0005629 0.706825 0.707388" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Stanchion_Baseplate" />
+      <geom pos="0 0 0.4" quat="0.70626 0 0 -0.7079526" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="cylinder" size="0.075 0.25" />
+      <body name="/r2/waist_center" pos="0 0 0.72" quat="0.0005651 -0.7056967 0.7085136 0.000561">
+        <joint name="/r2/waist/joint0" type="hinge" axis="0 0.0000027 1.0000003" limited="true" range="-3.14 3.14" damping="10" frictionloss="0"/>
+        <inertial pos="0.0000227 0 -0.0002704" mass="20.13" fullinertia="2.00426 2.00716 2.0042 0 -0.000355745 0"/>
+        <geom pos="0.02 0.05 -0.5625" quat="0.5003982 -0.4999998 0.4996018 -0.4999998" group="1" contype="0" conaffinity="0" material="r2_waist_center_mat_1" type="mesh" mesh="Body_material_1" />
+        <geom pos="0.02 0.05 -0.5625" quat="0.5003982 -0.4999998 0.4996018 -0.4999998" group="1" contype="0" conaffinity="0" material="r2_waist_center_mat_2" type="mesh" mesh="Body_material_3" />
+        <geom pos="0 0 -0.54" quat="0.9921977 0 0 0.1246747" group="1" contype="0" conaffinity="0" material="r2_waist_center_mat_2_2" type="mesh" mesh="Backpack" />
+        <geom pos="0.02 0.05 -0.5625" quat="0.5003982 -0.4999998 0.4996018 -0.4999998" group="1" contype="0" conaffinity="0" material="r2_waist_center_mat_3" type="mesh" mesh="Body_Cover" />
+        <geom pos="0.02 0.05 -0.5625" quat="0.5003982 -0.4999998 0.4996018 -0.4999998" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Body" />
+        <geom pos="0 0 -0.54" quat="0.9921977 0 0 0.1246747" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Backpack" />
+        <geom pos="0.02 0.05 -0.5625" quat="0.5003982 -0.4999998 0.4996018 -0.4999998" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Body_Cover" />
+        <body name="torso_frame" pos="0 0 0">
+          <body name="/r2/left_shoulder_roll" pos="-0.065342 -0.0000013 -0.5442466" quat="0.0923553 -0.0919508 0.6995339 -0.702615">
+          <joint name="/r2/left_arm/joint0" type="hinge" axis="0.0000013 -0.0000042 1" limited="true" range="-1.57 1.57" damping="10" frictionloss="0"/>
+          <inertial pos="-0.0089916 -0.0013157 0.10287" mass="6.16886" fullinertia="0.0198585 0.0671901 0.063415 -0.0060196 -0.000395063 0.00012683"/>
+          <geom pos="0 0 0.08" quat="0.7073883 0 0 0.7068252" group="1" contype="0" conaffinity="0" material="r2_left_shoulder_roll_mat" type="mesh" mesh="Left_Shoulder_Upper" />
+          <geom pos="0 0 0.08" quat="0.7073883 0 0 0.7068252" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Left_Shoulder_Upper" />
+          <body name="/r2/left_shoulder_pitch" pos="0.0000006 0.0000009 0.3166114" quat="0.5001754 -0.4998249 -0.4998259 0.5001737">
+            <joint name="/r2/left_arm/joint1" type="hinge" axis="-0.0000005 -0.0000003 1.0000003" limited="true" range="-1.66 0.175" damping="10" frictionloss="0"/>
+            <inertial pos="0.037084 -0.0002845 0.0077978" mass="4.42706" fullinertia="0.0270106 0.0113837 0.0251963 0.00151295 -0.0000523825 0.0000217139"/>
+            <geom pos="0 0 0" quat="0.7073883 0 0 -0.7068252" group="1" contype="0" conaffinity="0" material="r2_left_shoulder_pitch_mat" type="mesh" mesh="Left_Shoulder_Lower" />
+            <geom pos="0 0 0" quat="0.7073883 0 0 -0.7068252" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Left_Shoulder_Lower" />
+            <body name="/r2/left_upper_arm" pos="0 0 0" quat="0.7073899 0.7068235 0 0">
+              <joint name="/r2/left_arm/joint2" type="hinge" axis="-0.0000016 -0.0000046 1.0000001" limited="true" range="-4.89 -0.79" damping="10" frictionloss="0"/>
+              <inertial pos="-0.0074168 -0.041402 0.1016" mass="4.85344" fullinertia="0.0160074 0.0462371 0.0421401 -0.00339462 0.00658439 0.00137541"/>
+              <geom pos="0 0 0.1016" quat="0.0007963 0 0 0.9999997" group="1" contype="0" conaffinity="0" material="r2_left_upper_arm_mat" type="mesh" mesh="Left_Upper_Arm" />
+              <geom pos="0 0 0.1016" quat="0.0007963 0 0 0.9999997" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Left_Upper_Arm" />
+              <body name="/r2/left_elbow" pos="-0.0543775 -0.0000012 0.3564373" quat="0.7056915 -0.7085192 0 0">
+                <joint name="/r2/left_arm/joint3" type="hinge" axis="-0.0000005 0 1.0000001" limited="true" range="-2.79 -0.087" damping="1" frictionloss="0"/>
+                <inertial pos="0.026162 0.033782 0.0154432" mass="2.97103" fullinertia="0.0120275 0.00883772 0.010535 0.00164171 -0.00118812 0.00316051"/>
+                <geom pos="0 0 0" quat="0.7073883 0 0 -0.7068252" group="1" contype="0" conaffinity="0" material="r2_left_elbow_mat" type="mesh" mesh="Left_Elbow" />
+                <geom pos="0 0 0" quat="0.7073883 0 0 -0.7068252" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Left_Elbow" />
+                <body name="/r2/left_lower_arm" pos="0.0540307 -0.0000001 -0.0000003" quat="0.7060457 0.7081663 0 0">
+                  <joint name="/r2/left_arm/joint4" type="hinge" axis="-0.0000016 -0.0000044 1" limited="true" range="-1.3 4.45" damping="1" frictionloss="0"/>
+                  <inertial pos="0.0003556 -0.0012268 0.17653" mass="6.93996" fullinertia="0.012525 0.0395064 0.0403843 -0.000244647 0.000520899 -0.000169146"/>
+                  <geom pos="0 0 0.1" group="1" contype="0" conaffinity="0" material="r2_left_lower_arm_mat" type="mesh" mesh="Left_Forearm" />
+                  <geom pos="0 0 0.1" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Left_Forearm" />
+                  <body name="/r2/left_wrist_pitch" pos="0.0000067 -0.0000012 0.3570483" quat="0.698428 -0.7156803 0 0">
+                    <joint name="/r2/left_arm/joint5" type="hinge" axis="-0.0000005 0.0000002 0.9999995" limited="true" range="-1.22 1.22" damping="1" frictionloss="0"/>
+                    <inertial pos="-0.004064 0.0000002 -0.000922" mass="0.116573" fullinertia="0.00005765 0.0000169438 0.0000441886 0 0.0000017588 0.0000000544"/>
+                    <body name="/r2/left_wrist_yaw" pos="-0.0000206 -0.0060721 -0.0000003" quat="0.479224 0.5190296 -0.5200193 -0.480138">
+                      <joint name="/r2/left_arm/joint6" type="hinge" axis="0.0000001 0.0000039 1" limited="true" range="-0.785 0.785" damping="1" frictionloss="0"/>
+                      <inertial pos="0.0332051 -0.0258121 0.0332857" mass="2.37882" fullinertia="0.0112391 0.0135826 0.0112115 0.000520047 0.00298821 0.000437366"/>
+                      <geom pos="0 0 0" quat="0.0005672 0.7123184 0.701856 0.0005589" group="1" contype="0" conaffinity="0" material="r2_left_wrist_yaw_mat" type="mesh" mesh="Left_Palm" />
+                      <geom pos="0 0 0" quat="0.0005672 0.7123184 0.701856 0.0005589" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Left_Palm" />
+                      <body name="/r2/left_index_yaw" pos="0.0994672 0.0271107 -0.0161617" quat="0.9981348 -0.000004 0 0.0610485">
+                        <joint name="/r2/left_arm/hand/index/joint0" type="hinge" axis="0 -0.0000042 1" limited="true" range="-0.3491 0.3491" damping="0.1" frictionloss="0"/>
+                        <inertial pos="0 0 0" mass="0.001" diaginertia="0.001 0.001 0.001"/>
+                        <body name="/r2/left_index_proximal" pos="0.0096513 -0.0000001 0" quat="0.7071055 0.7071081 0 0">
+                          <joint name="/r2/left_arm/hand/index/joint1" type="hinge" axis="0.0000002 -0.0000001 1.0000002" limited="true" range="0 1.57" damping="0.1" frictionloss="0"/>
+                          <inertial pos="0 0 0" mass="0.001" diaginertia="0.001 0.001 0.001"/>
+                          <geom pos="0 0 0" quat="0.7073883 0 0 0.7068252" group="1" contype="0" conaffinity="0" material="r2_left_index_proximal_mat" type="mesh" mesh="Finger_Proximal" />
+                          <geom pos="0 0 0" quat="0.7073883 0 0 0.7068252" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Finger_Proximal" />
+                          <body name="/r2/left_index_medial" pos="0.0444471 0.0000032 -0.0000017">
+                            <joint name="/r2/left_arm/hand/index/joint2" type="hinge" axis="0.0000002 -0.0000001 1.0000002" limited="true" range="0 1.57" damping="0.1" frictionloss="0"/>
+                            <inertial pos="0 0 0" mass="0.001" diaginertia="0.001 0.001 0.001"/>
+                            <geom pos="0 0 0" quat="0.0005633 0.707388 0.706825 0.0005629" group="1" contype="0" conaffinity="0" material="r2_left_index_medial_mat" type="mesh" mesh="Finger_Mid" />
+                            <geom pos="0 0 0" quat="0.0005633 0.707388 0.706825 0.0005629" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Finger_Mid" />
+                            <body name="/r2/left_index_distal" pos="0.030482 -0.0000051 0.0000014">
+                              <joint name="/r2/left_arm/hand/index/joint3" type="hinge" axis="0.0000002 -0.0000001 1.0000002" limited="true" range="0 1.57" damping="0.1" frictionloss="0"/>
+                              <inertial pos="0.012319 0 0" mass="0.002" diaginertia="0.002 0.0020003 0.0020003"/>
+                              <geom pos="0 0 0" quat="0.7073883 0 -0.7068252 0" group="1" contype="0" conaffinity="0" material="r2_left_index_distal_mat" type="mesh" mesh="Finger_Dist" />
+                              <geom pos="0 0 0" quat="0.7073883 0 -0.7068252 0" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Finger_Dist" />
+                            </body>
+                          </body>
+                        </body>
+                      </body>
+                      <body name="/r2/left_middle_yaw" pos="0.106465 0.0025398 -0.0161579">
+                        <joint name="/r2/left_arm/hand/middle/joint0" type="hinge" axis="0.0000001 0.0000039 1" limited="true" range="-0.3491 0.3491" damping="0.1" frictionloss="0"/>
+                        <inertial pos="0 0 0" mass="0.001" diaginertia="0.001 0.001 0.001"/>
+                        <body name="/r2/left_middle_proximal" pos="0.0096555 -0.0000014 -0.0000051" quat="0.707109 0.7071045 0 0">
+                          <joint name="/r2/left_arm/hand/middle/joint1" type="hinge" axis="0.0000003 -0.0000022 0.9999998" limited="true" range="0 1.57" damping="0.1" frictionloss="0"/>
+                          <inertial pos="0 0 0" mass="0.001" diaginertia="0.001 0.001 0.001"/>
+                          <geom pos="0 0 0" quat="0.7073883 0 0 0.7068252" group="1" contype="0" conaffinity="0" material="r2_left_middle_proximal_mat" type="mesh" mesh="Finger_Proximal" />
+                          <geom pos="0 0 0" quat="0.7073883 0 0 0.7068252" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Finger_Proximal" />
+                          <body name="/r2/left_middle_medial" pos="0.0444481 0 -0.0000003">
+                            <joint name="/r2/left_arm/hand/middle/joint2" type="hinge" axis="0.0000003 -0.0000022 0.9999998" limited="true" range="0 1.57" damping="0.1" frictionloss="0"/>
+                            <inertial pos="0 0 0" mass="0.001" diaginertia="0.001 0.001 0.001"/>
+                            <geom pos="0 0 0" quat="0.0005633 0.707388 0.706825 0.0005629" group="1" contype="0" conaffinity="0" material="r2_left_middle_medial_mat" type="mesh" mesh="Finger_Mid" />
+                            <geom pos="0 0 0" quat="0.0005633 0.707388 0.706825 0.0005629" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Finger_Mid" />
+                            <body name="/r2/left_middle_distal" pos="0.030481 0.0000043 -0.0000001">
+                              <joint name="/r2/left_arm/hand/middle/joint3" type="hinge" axis="0.0000003 -0.0000022 0.9999998" limited="true" range="0 1.57" damping="0.1" frictionloss="0"/>
+                              <inertial pos="0.012319 0 0" mass="0.002" diaginertia="0.002 0.0020003 0.0020003"/>
+                              <geom pos="0 0 0" quat="0.7073883 0 -0.7068252 0" group="1" contype="0" conaffinity="0" material="r2_left_middle_distal_mat" type="mesh" mesh="Finger_Dist" />
+                              <geom pos="0 0 0" quat="0.7073883 0 -0.7068252 0" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Finger_Dist" />
+                            </body>
+                          </body>
+                        </body>
+                      </body>
+                      <body name="/r2/left_little_proximal" pos="0.0946381 -0.0403808 -0.0060968" quat="0.6940909 0.7132797 -0.0928202 -0.0292274">
+                        <joint name="/r2/left_arm/hand/little/joint0" type="hinge" axis="0 0.0000041 1.0000001" limited="true" range="0 2.9671" damping="0.1" frictionloss="0"/>
+                        <inertial pos="0 0 0" mass="0.001" diaginertia="0.001 0.001 0.001"/>
+                        <geom pos="0 0 0" quat="0.7073883 0 0 0.7068252" group="1" contype="0" conaffinity="0" material="r2_left_little_proximal_mat" type="mesh" mesh="Finger_Proximal" />
+                        <geom pos="0 0 0" quat="0.7073883 0 0 0.7068252" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Finger_Proximal" />
+                        <body name="/r2/left_little_medial" pos="0.0444482 0.0000075 -0.0000014">
+                          <joint name="/r2/left_arm/hand/little/joint1" type="hinge" axis="0 0.0000041 1.0000001" limited="true" range="0 2.9671" damping="0.1" frictionloss="0"/>
+                          <inertial pos="0 0 0" mass="0.001" diaginertia="0.001 0.001 0.001"/>
+                          <geom pos="0 0 0" quat="0.0005633 0.707388 0.706825 0.0005629" group="1" contype="0" conaffinity="0" material="r2_left_little_medial_mat" type="mesh" mesh="Finger_Mid" />
+                          <geom pos="0 0 0" quat="0.0005633 0.707388 0.706825 0.0005629" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Finger_Mid" />
+                          <body name="/r2/left_little_distal" pos="0.0304793 -0.0000022 0.0000006">
+                            <joint name="/r2/left_arm/hand/little/joint2" type="hinge" axis="0 0.0000041 1.0000001" limited="true" range="0 2.9671" damping="0.1" frictionloss="0"/>
+                            <inertial pos="0.012319 0 0" mass="0.002" diaginertia="0.002 0.0020003 0.0020003"/>
+                            <geom pos="0 0 0" quat="0.7073883 0 -0.7068252 0" group="1" contype="0" conaffinity="0" material="r2_left_little_distal_mat" type="mesh" mesh="Finger_Dist" />
+                            <geom pos="0 0 0" quat="0.7073883 0 -0.7068252 0" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Finger_Dist" />
+                          </body>
+                        </body>
+                      </body>
+                      <body name="/r2/left_ring_proximal" pos="0.1084565 -0.0197668 -0.0123211" quat="0.7057894 0.7057864 -0.0431676 -0.0431675">
+                        <joint name="/r2/left_arm/hand/ring/joint0" type="hinge" axis="-0.0000005 -0.0000004 0.9999995" limited="true" range="0 2.9671" damping="0.1" frictionloss="0"/>
+                        <inertial pos="0 0 0" mass="0.001" diaginertia="0.001 0.001 0.001"/>
+                        <geom pos="0 0 0" quat="0.7073883 0 0 0.7068252" group="1" contype="0" conaffinity="0" material="r2_left_ring_proximal_mat" type="mesh" mesh="Finger_Proximal" />
+                        <geom pos="0 0 0" quat="0.7073883 0 0 0.7068252" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Finger_Proximal" />
+                        <body name="/r2/left_ring_medial" pos="0.044454 0.0000013 0.0000012">
+                          <joint name="/r2/left_arm/hand/ring/joint1" type="hinge" axis="-0.0000005 -0.0000004 0.9999995" limited="true" range="0 2.9671" damping="0.1" frictionloss="0"/>
+                          <inertial pos="0 0 0" mass="0.001" diaginertia="0.001 0.001 0.001"/>
+                          <geom pos="0 0 0" quat="0.0005633 0.707388 0.706825 0.0005629" group="1" contype="0" conaffinity="0" material="r2_left_ring_medial_mat" type="mesh" mesh="Finger_Mid" />
+                          <geom pos="0 0 0" quat="0.0005633 0.707388 0.706825 0.0005629" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Finger_Mid" />
+                          <body name="/r2/left_ring_distal" pos="0.030475 -0.0000033 -0.000001">
+                            <joint name="/r2/left_arm/hand/ring/joint2" type="hinge" axis="-0.0000005 -0.0000004 0.9999995" limited="true" range="0 2.9671" damping="0.1" frictionloss="0"/>
+                            <inertial pos="0.012319 0 0" mass="0.002" diaginertia="0.002 0.0020003 0.0020003"/>
+                            <geom pos="0 0 0" quat="0.7073883 0 -0.7068252 0" group="1" contype="0" conaffinity="0" material="r2_left_ring_distal_mat" type="mesh" mesh="Finger_Dist" />
+                            <geom pos="0 0 0" quat="0.7073883 0 -0.7068252 0" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Finger_Dist" />
+                          </body>
+                        </body>
+                      </body>
+                      <body name="/r2/left_thumb_base" pos="0.0330214 0.0304794 0.0063484" quat="0.5609852 -0.5609849 -0.4304581 0.4304617">
+                        <joint name="/r2/left_arm/hand/thumb/joint0" type="hinge" axis="0.0000016 0.0000044 1" limited="true" range="-1.2217 0" damping="0.1" frictionloss="0"/>
+                        <inertial pos="0.0002341 0 0" mass="0.051" diaginertia="0.002 0.00200014 0.00200014"/>
+                        <geom pos="0.001938 0 0" quat="0.0003963 -0.9999999 0 0" group="1" contype="0" conaffinity="0" material="r2_left_thumb_base_mat" type="mesh" mesh="Left_Thumb_Carp" />
+                        <geom pos="0.001938 0 0" quat="0.0003963 -0.9999999 0 0" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Left_Thumb_Carp" />
+                        <body name="/r2/left_thumb_medial_prime" pos="0.0119377 0.0000052 -0.0000023" quat="0.7071054 -0.7071082 0 0">
+                          <joint name="/r2/left_arm/hand/thumb/joint1" type="hinge" axis="0 0.0000001 1" limited="true" range="0 1.3963" damping="0.1" frictionloss="0"/>
+                          <inertial pos="0 0 0" mass="0.001" diaginertia="0.001 0.001 0.001"/>
+                          <geom pos="0 0 0" quat="0.5003982 -0.4999998 -0.4999998 -0.4996018" group="1" contype="0" conaffinity="0" material="r2_left_thumb_medial_prime_mat" type="mesh" mesh="Left_Thumb_MtCar" />
+                          <geom pos="0 0 0" quat="0.5003982 -0.4999998 -0.4999998 -0.4996018" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Left_Thumb_MtCar" />
+                          <body name="/r2/left_thumb_medial" pos="0.0307346 -0.0019074 0.0025352" quat="0.9396924 -0.3420206 0 0">
+                            <joint name="/r2/left_arm/hand/thumb/joint2" type="hinge" axis="-0.000001 -0.0000007 1.0000001" limited="true" range="0 1.2217" damping="0.1" frictionloss="0"/>
+                            <inertial pos="0 0 0" mass="0.001" diaginertia="0.001 0.001 0.001"/>
+                            <geom pos="0 0 0" quat="0.0005633 0.707388 0.706825 0.0005629" group="1" contype="0" conaffinity="0" material="r2_left_thumb_medial_mat" type="mesh" mesh="Thumb_Proximal" />
+                            <geom pos="0 0 0" quat="0.0005633 0.707388 0.706825 0.0005629" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Thumb_Proximal" />
+                            <body name="/r2/left_thumb_distal" pos="0.0393695 -0.0000011 -0.0000008">
+                              <joint name="/r2/left_arm/hand/thumb/joint3" type="hinge" axis="-0.000001 -0.0000007 1.0000001" limited="true" range="-0.5236 1.57" damping="0.1" frictionloss="0"/>
+                              <inertial pos="0.01651 0 0" mass="0.002" diaginertia="0.002 0.00200055 0.00200055"/>
+                              <geom pos="0 0 0" quat="0.0000007 -0.0007963 -0.0007963 0.9999994" group="1" contype="0" conaffinity="0" material="r2_left_thumb_distal_mat" type="mesh" mesh="Thumb_Dist" />
+                              <geom pos="0 0 0" quat="0.0000007 -0.0007963 -0.0007963 0.9999994" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Thumb_Dist" />
+                            </body>
+                          </body>
+                        </body>
+                      </body>
+                      <body name="left_hand_frame" pos="0 0 0" quat="0.596562 -0.026919 -0.030512 -0.801535"/>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+          <body name="/r2/right_shoulder_roll" pos="-0.065342 -0.0000013 -0.5442466" quat="0.7049792 -0.6971348 0.0916978 -0.0927301">
+          <joint name="/r2/right_arm/joint0" type="hinge" axis="0.0000024 -0.0000045 0.9999995" limited="true" range="-1.57 1.57" damping="10" frictionloss="0"/>
+          <inertial pos="0.0089916 -0.0013157 0.10287" mass="6.16886" fullinertia="0.0198585 0.0671901 0.063415 0.0060196 0.000395063 0.00012683"/>
+          <geom pos="0 0 0.0254" quat="0.4311765 0 0 0.9022676" group="1" contype="0" conaffinity="0" material="r2_right_shoulder_roll_mat" type="mesh" mesh="Right_Shoulder_Upper" />
+          <geom pos="0 0 0.0254" quat="0.3855431 0 0 0.9226898" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Right_Shoulder_Upper" />
+          <body name="/r2/right_shoulder_pitch" pos="0.0000008 -0.0000061 0.3209286" quat="0.501771 0.498223 -0.498222 -0.5017713">
+            <joint name="/r2/right_arm/joint1" type="hinge" axis="-0.0000004 0.0000019 1.0000001" limited="true" range="-1.66 0.175" damping="10" frictionloss="0"/>
+            <inertial pos="0.0077978 0.037084 0.0002845" mass="4.42706" fullinertia="0.0113837 0.0251963 0.0270106 -0.0000217139 -0.00151295 -0.0000523825"/>
+            <geom pos="0 0 0" quat="0.7073883 0 0 0.7068252" group="1" contype="0" conaffinity="0" material="r2_right_shoulder_pitch_mat" type="mesh" mesh="Right_Shoulder_Lower" />
+            <geom pos="0 0 0" quat="0.7073883 0 0 0.7068252" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Right_Shoulder_Lower" />
+            <body name="/r2/right_upper_arm" pos="0 0 0" quat="0.70813 -0.706082 0 0">
+              <joint name="/r2/right_arm/joint2" type="hinge" axis="0.0000033 0.0000011 0.9999999" limited="true" range="0.785 4.89" damping="10" frictionloss="0"/>
+              <inertial pos="0.041402 -0.0074168 0.1016" mass="4.85344" fullinertia="0.0421401 0.0462371 0.0160074 -0.00137541 -0.00658439 -0.00339462"/>
+              <geom pos="0 0 0.1016" group="1" contype="0" conaffinity="0" material="r2_right_upper_arm_mat" type="mesh" mesh="Right_Upper_Arm" />
+              <geom pos="0 0 0.1016" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Right_Upper_Arm" />
+              <body name="/r2/right_elbow" pos="0.0535992 0.0000004 0.3552188" quat="0.7079535 0.706259 0 0">
+                <joint name="/r2/right_arm/joint3" type="hinge" axis="-0.0000004 0.0000014 1.0000003" limited="true" range="-2.79 -0.087" damping="1" frictionloss="0"/>
+                <inertial pos="-0.026162 0.033782 0.0154432" mass="2.97103" fullinertia="0.0120275 0.00883772 0.010535 -0.00118812 0.00164171 -0.00316051"/>
+                <geom pos="0 0 0" quat="0.7073883 0 0 0.7068252" group="1" contype="0" conaffinity="0" material="r2_right_elbow_mat" type="mesh" mesh="Right_Elbow" />
+                <geom pos="0 0 0" quat="0.7073883 0 0 0.7068252" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Right_Elbow" />
+                <body name="/r2/right_lower_arm" pos="-0.0537437 0.000001 0" quat="0.7089416 -0.7052672 0 0">
+                  <joint name="/r2/right_arm/joint4" type="hinge" axis="0.0000033 0.0000017 1.0000002" limited="true" range="-4.45 1.31" damping="1" frictionloss="0"/>
+                  <inertial pos="0.0003556 -0.0012268 0.17653" mass="6.93996" fullinertia="0.012525 0.0395064 0.0403843 0.000244647 0.000520899 0.000169146"/>
+                  <geom pos="0 0 0.1" group="1" contype="0" conaffinity="0" material="r2_right_lower_arm_mat" type="mesh" mesh="Right_Forearm" />
+                  <geom pos="0 0 0.1" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Right_Forearm" />
+                  <body name="/r2/right_wrist_pitch" pos="0.000007 0.0000008 0.3569461" quat="0.7203774 0.6935823 0 0">
+                    <joint name="/r2/right_arm/joint5" type="hinge" axis="-0.0000003 0.0000011 1.0000003" limited="true" range="-1.22 1.22" damping="1" frictionloss="0"/>
+                    <inertial pos="0.000922 -0.004064 0.0000002" mass="0.116573" fullinertia="0.0000169438 0.0000441886 0.00005765 0.0000000544 0 -0.0000017588"/>
+                    <body name="/r2/right_wrist_yaw" pos="-0.0001457 0.0064917 0.0000005" quat="0.4969628 0.4922181 0.5029169 0.5077636">
+                      <joint name="/r2/right_arm/joint6" type="hinge" axis="0 0.0000047 1.0000005" limited="true" range="-0.785 0.785" damping="1" frictionloss="0"/>
+                      <inertial pos="0.0637396 -0.0002072 0.0218989" mass="1.33941" fullinertia="0.00516672 0.00807358 0.00654117 -0.0000580194 -0.000187327 0.000316215"/>
+                      <geom pos="0 0 0" quat="0.0005548 0.6967424 0.717321 0.0005712" group="1" contype="0" conaffinity="0" material="r2_right_wrist_yaw_mat" type="mesh" mesh="Right_Palm" />
+                      <geom pos="0 0 0" quat="0.0005548 0.6967424 0.717321 0.0005712" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Right_Palm" />
+                      <body name="/r2/right_index_yaw" pos="0.0994671 -0.0271117 -0.0161519" quat="0.9981348 0 -0.0000003 -0.0610483">
+                        <joint name="/r2/right_arm/hand/index/joint0" type="hinge" axis="0.0000001 0.0000047 1.0000005" limited="true" range="-0.3491 0.3491" damping="0.1" frictionloss="0"/>
+                        <inertial pos="0 0 0" mass="0.05" diaginertia="0.001 0.001 0.001"/>
+                        <body name="/r2/right_index_proximal" pos="0.0096459 -0.0000024 0.0000017" quat="0.7071071 0.7071064 0 0">
+                          <joint name="/r2/right_arm/hand/index/joint1" type="hinge" axis="-0.0000001 0.000004 1.0000002" limited="true" range="0 1.57" damping="0.1" frictionloss="0"/>
+                          <inertial pos="0 0 0" mass="0.05" diaginertia="0.001 0.001 0.001"/>
+                          <geom pos="0 0 0" quat="0.7073883 0 0 0.7068252" group="1" contype="0" conaffinity="0" material="r2_right_index_proximal_mat" type="mesh" mesh="Finger_Proximal" />
+                          <geom pos="0 0 0" quat="0.7073883 0 0 0.7068252" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Finger_Proximal" />
+                          <body name="/r2/right_index_medial" pos="0.0444569 -0.0000034 -0.0000034">
+                            <joint name="/r2/right_arm/hand/index/joint2" type="hinge" axis="-0.0000001 0.000004 1.0000002" limited="true" range="0 1.57" damping="0.1" frictionloss="0"/>
+                            <inertial pos="0 0 0" mass="0.05" diaginertia="0.001 0.001 0.001"/>
+                            <geom pos="0 0 0" quat="0.0005633 0.707388 0.706825 0.0005629" group="1" contype="0" conaffinity="0" material="r2_right_index_medial_mat" type="mesh" mesh="Finger_Mid" />
+                            <geom pos="0 0 0" quat="0.0005633 0.707388 0.706825 0.0005629" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Finger_Mid" />
+                            <body name="/r2/right_index_distal" pos="0.0304786 -0.0000019 0.0000006">
+                              <joint name="/r2/right_arm/hand/index/joint3" type="hinge" axis="-0.0000001 0.000004 1.0000002" limited="true" range="0 1.57" damping="0.1" frictionloss="0"/>
+                              <inertial pos="0.012319 0 0" mass="0.1" diaginertia="0.002 0.00201518 0.00201518"/>
+                              <geom pos="0 0 0" quat="0.7073883 0 -0.7068252 0" group="1" contype="0" conaffinity="0" material="r2_right_index_distal_mat" type="mesh" mesh="Finger_Dist" />
+                              <geom pos="0 0 0" quat="0.7073883 0 -0.7068252 0" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Finger_Dist" />
+                            </body>
+                          </body>
+                        </body>
+                      </body>
+                      <body name="/r2/right_middle_yaw" pos="0.1064679 -0.0025391 -0.0161507">
+                        <joint name="/r2/right_arm/hand/middle/joint0" type="hinge" axis="0 0.0000047 1.0000005" limited="true" range="-0.3491 0.3491" damping="0.1" frictionloss="0"/>
+                        <inertial pos="0 0 0" mass="0.001" diaginertia="0.001 0.001 0.001"/>
+                        <body name="/r2/right_middle_proximal" pos="0.0096529 -0.0000002 -0.000005" quat="0.7071071 0.7071064 0 0">
+                          <joint name="/r2/right_arm/hand/middle/joint1" type="hinge" axis="-0.0000001 0.000004 0.9999996" limited="true" range="0 1.57" damping="0.1" frictionloss="0"/>
+                          <inertial pos="0 0 0" mass="0.05" diaginertia="0.001 0.001 0.001"/>
+                          <geom pos="0 0 0" quat="0.7073883 0 0 0.7068252" group="1" contype="0" conaffinity="0" material="r2_right_middle_proximal_mat" type="mesh" mesh="Finger_Proximal" />
+                          <geom pos="0 0 0" quat="0.7073883 0 0 0.7068252" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Finger_Proximal_2" />
+                          <body name="/r2/right_middle_medial" pos="0.0444467 0.0000075 0.0000008">
+                            <joint name="/r2/right_arm/hand/middle/joint2" type="hinge" axis="-0.0000001 0.000004 0.9999996" limited="true" range="0 1.57" damping="0.1" frictionloss="0"/>
+                            <inertial pos="0 0 0" mass="0.05" diaginertia="0.001 0.001 0.001"/>
+                            <geom pos="0 0 0" quat="0.0005633 0.707388 0.706825 0.0005629" group="1" contype="0" conaffinity="0" material="r2_right_middle_medial_mat" type="mesh" mesh="Finger_Mid" />
+                            <geom pos="0 0 0" quat="0.0005633 0.707388 0.706825 0.0005629" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Finger_Mid_2" />
+                            <body name="/r2/right_middle_distal" pos="0.0304753 0 0.000002">
+                              <joint name="/r2/right_arm/hand/middle/joint3" type="hinge" axis="-0.0000001 0.000004 0.9999996" limited="true" range="0 1.57" damping="0.1" frictionloss="0"/>
+                              <inertial pos="0.012319 0 0" mass="0.1" diaginertia="0.002 0.00201518 0.00201518"/>
+                              <geom pos="0 0 0" quat="0.7073883 0 -0.7068252 0" group="1" contype="0" conaffinity="0" material="r2_right_middle_distal_mat" type="mesh" mesh="Finger_Dist" />
+                              <geom pos="0 0 0" quat="0.7073883 0 -0.7068252 0" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Finger_Dist_2" />
+                            </body>
+                          </body>
+                        </body>
+                      </body>
+                      <body name="/r2/right_little_proximal" pos="0.0946328 0.0403786 -0.0060882" quat="0.7132802 0.6940907 0.0292269 0.0928186">
+                        <joint name="/r2/right_arm/hand/little/joint0" type="hinge" axis="0.0000032 0.0000034 1.0000003" limited="true" range="0 2.9671" damping="0.1" frictionloss="0"/>
+                        <inertial pos="0 0 0" mass="0.05" diaginertia="0.001 0.001 0.001"/>
+                        <geom pos="0 0 0" quat="0.7073883 0 0 0.7068252" group="1" contype="0" conaffinity="0" material="r2_right_little_proximal_mat" type="mesh" mesh="Finger_Proximal" />
+                        <geom pos="0 0 0" quat="0.7073883 0 0 0.7068252" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Finger_Proximal_2" />
+                        <body name="/r2/right_little_medial" pos="0.0444544 -0.0000026 -0.0000007">
+                          <joint name="/r2/right_arm/hand/little/joint1" type="hinge" axis="0.0000032 0.0000034 1.0000003" limited="true" range="0 2.9671" damping="0.1" frictionloss="0"/>
+                          <inertial pos="0 0 0" mass="0.05" diaginertia="0.001 0.001 0.001"/>
+                          <geom pos="0 0 0" quat="0.0005633 0.707388 0.706825 0.0005629" group="1" contype="0" conaffinity="0" material="r2_right_little_medial_mat" type="mesh" mesh="Finger_Mid" />
+                          <geom pos="0 0 0" quat="0.0005633 0.707388 0.706825 0.0005629" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Finger_Mid_2" />
+                          <body name="/r2/right_little_distal" pos="0.0304821 0.0000043 0.0000005">
+                            <joint name="/r2/right_arm/hand/little/joint2" type="hinge" axis="0.0000032 0.0000034 1.0000003" limited="true" range="0 2.9671" damping="0.1" frictionloss="0"/>
+                            <inertial pos="0.012319 0 0" mass="0.1" diaginertia="0.002 0.00201518 0.00201518"/>
+                            <geom pos="0 0 0" quat="0.7073883 0 -0.7068252 0" group="1" contype="0" conaffinity="0" material="r2_right_little_distal_mat" type="mesh" mesh="Finger_Dist" />
+                            <geom pos="0 0 0" quat="0.7073883 0 -0.7068252 0" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Finger_Dist_2" />
+                          </body>
+                        </body>
+                      </body>
+                      <body name="/r2/right_ring_proximal" pos="0.1084562 0.019793 -0.0123124" quat="0.705788 0.7057879 0.0431668 0.0431664">
+                        <joint name="/r2/right_arm/hand/ring/joint0" type="hinge" axis="0.0000029 0.0000044 1.0000001" limited="true" range="0 2.9671" damping="0.1" frictionloss="0"/>
+                        <inertial pos="0 0 0" mass="0.05" diaginertia="0.001 0.001 0.001"/>
+                        <geom pos="0 0 0" quat="0.7073883 0 0 0.7068252" group="1" contype="0" conaffinity="0" material="r2_right_ring_proximal_mat" type="mesh" mesh="Finger_Proximal" />
+                        <geom pos="0 0 0" quat="0.7073883 0 0 0.7068252" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Finger_Proximal_2" />
+                        <body name="/r2/right_ring_medial" pos="0.0444495 -0.0000079 -0.0000005">
+                          <joint name="/r2/right_arm/hand/ring/joint1" type="hinge" axis="0.0000029 0.0000044 1.0000001" limited="true" range="0 2.9671" damping="0.1" frictionloss="0"/>
+                          <inertial pos="0 0 0" mass="0.05" diaginertia="0.001 0.001 0.001"/>
+                          <geom pos="0 0 0" quat="0.0005633 0.707388 0.706825 0.0005629" group="1" contype="0" conaffinity="0" material="r2_right_ring_medial_mat" type="mesh" mesh="Finger_Mid" />
+                          <geom pos="0 0 0" quat="0.0005633 0.707388 0.706825 0.0005629" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Finger_Mid_2" />
+                          <body name="/r2/right_ring_distal" pos="0.0304759 0.0000074 0.0000006">
+                            <joint name="/r2/right_arm/hand/ring/joint2" type="hinge" axis="0.0000029 0.0000044 1.0000001" limited="true" range="0 2.9671" damping="0.1" frictionloss="0"/>
+                            <inertial pos="0.012319 0 0" mass="0.1" diaginertia="0.002 0.00201518 0.00201518"/>
+                            <geom pos="0 0 0" quat="0.7073883 0 -0.7068252 0" group="1" contype="0" conaffinity="0" material="r2_right_ring_distal_mat" type="mesh" mesh="Finger_Dist" />
+                            <geom pos="0 0 0" quat="0.7073883 0 -0.7068252 0" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Finger_Dist_2" />
+                          </body>
+                        </body>
+                      </body>
+                      <body name="/r2/right_thumb_base" pos="0.03302 -0.0304802 0.0063504" quat="0.5213345 0.5963663 -0.3799304 -0.4777138">
+                        <joint name="/r2/right_arm/hand/thumb/joint0" type="hinge" axis="0.000002 0.0000013 0.9999998" limited="true" range="0 1.2217" damping="0.1" frictionloss="0"/>
+                        <inertial pos="0.005969 0 0" mass="0.1" diaginertia="0.002 0.00200356 0.00200356"/>
+                        <geom pos="0.001938 0 0" quat="0.0003963 -0.9999999 0 0" group="1" contype="0" conaffinity="0" material="r2_right_thumb_base_mat" type="mesh" mesh="Left_Thumb_Carp" />
+                        <geom pos="0.001938 0 0" quat="0.0003963 -0.9999999 0 0" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Left_Thumb_Carp_2" />
+                        <body name="/r2/right_thumb_medial_prime" pos="0.0119376 0.0000014 0.0000027" quat="0.7071071 -0.7071064 0 0">
+                          <joint name="/r2/right_arm/hand/thumb/joint1" type="hinge" axis="0.0000009 0.000002 0.9999998" limited="true" range="0 1.3963" damping="0.1" frictionloss="0"/>
+                          <inertial pos="0 0 0" mass="0.05" diaginertia="0.001 0.001 0.001"/>
+                          <geom pos="0 0 0" quat="0.5003982 -0.4999998 -0.4999998 -0.4996018" group="1" contype="0" conaffinity="0" material="r2_right_thumb_medial_prime_mat" type="mesh" mesh="Right_Thumb_MtCar" />
+                          <geom pos="0 0 0" quat="0.5003982 -0.4999998 -0.4999998 -0.4996018" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Right_Thumb_MtCar_2" />
+                          <body name="/r2/right_thumb_medial" pos="0.0307339 -0.0018995 -0.0025374" quat="0.939692 0.3420218 0 0">
+                            <joint name="/r2/right_arm/hand/thumb/joint2" type="hinge" axis="0.0000014 0.0000045 0.9999999" limited="true" range="0 1.2217" damping="0.1" frictionloss="0"/>
+                            <inertial pos="0 0 0" mass="0.05" diaginertia="0.001 0.001 0.001"/>
+                            <geom pos="0 0 0" quat="0.0005633 0.707388 0.706825 0.0005629" group="1" contype="0" conaffinity="0" material="r2_right_thumb_medial_mat" type="mesh" mesh="Thumb_Proximal" />
+                            <geom pos="0 0 0" quat="0.0005633 0.707388 0.706825 0.0005629" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Thumb_Proximal" />
+                            <body name="/r2/right_thumb_distal" pos="0.0393711 -0.0000093 0.0000009">
+                              <joint name="/r2/right_arm/hand/thumb/joint3" type="hinge" axis="0.0000014 0.0000045 0.9999999" limited="true" range="-0.5236 1.57" damping="0.1" frictionloss="0"/>
+                              <inertial pos="0.01651 0 0" mass="0.1" diaginertia="0.002 0.00202726 0.00202726"/>
+                              <geom pos="0 0 0" quat="0.0000007 -0.0007963 -0.0007963 0.9999994" group="1" contype="0" conaffinity="0" material="r2_right_thumb_distal_mat" type="mesh" mesh="Thumb_Dist" />
+                              <geom pos="0 0 0" quat="0.0000007 -0.0007963 -0.0007963 0.9999994" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Thumb_Dist" />
+                            </body>
+                          </body>
+                        </body>
+                      </body>
+                      <body name="right_hand_frame" pos="0 0 0" quat="0.803875 0.007217 -0.000783 -0.594753"/>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+        </body>
+        <body name="/r2/neck_base" pos="0.08636 -0.0000018 -0.6142183" quat="0.7071071 -0.7071064 0 0">
+          <joint name="/r2/neck/joint0" type="hinge" axis="0.000002 0.0000033 0.9999999" limited="true" range="-0.7 0.175" damping="10" frictionloss="0"/>
+          <inertial pos="0 0 0" mass="0.1" diaginertia="0.001 0.001 0.001"/>
+          <geom pos="0 0 0" quat="0.5003982 -0.4999998 0.4999998 0.4996018" group="1" contype="0" conaffinity="0" material="r2_neck_base_mat" type="mesh" mesh="Neck_Lower" />
+          <geom pos="0 0 0" quat="0.5003982 -0.4999998 0.4999998 0.4996018" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Neck_Lower" />
+          <body name="/r2/neck_lower_pitch" pos="-0.0762 0.0000086 0.0000002" quat="0.7071057 -0.7071078 0 0">
+            <joint name="/r2/neck/joint1" type="hinge" axis="0 0 1.0000003" limited="true" range="-1.22 1.22" damping="10" frictionloss="0"/>
+            <inertial pos="0 0 0" mass="0.1" diaginertia="0.001 0.001 0.001"/>
+            <geom pos="0.075 0 0" quat="0.7073883 0 0 0.7068252" group="1" contype="0" conaffinity="0" material="r2_neck_lower_pitch_mat" type="mesh" mesh="Neck_Upper" />
+            <geom pos="0.075 0 0" quat="0.7073883 0 0 0.7068252" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Neck_Upper" />
+            <body name="/r2/neck_roll" pos="0.0508001 0.0000001 0.1777611" quat="0.7071057 0.7071078 0 0">
+              <joint name="/r2/neck/joint2" type="hinge" axis="0.000002 0.0000033 0.9999999" limited="true" range="-0.7 0.175" damping="10" frictionloss="0"/>
+              <inertial pos="0.0814987 0.101613 -0.0110254" mass="1.13" fullinertia="0.0270085 0.0262663 0.0277254 -0.00227738 0.000477847 0.000477211"/>
+              <geom pos="0 0.07 0" quat="0.7073883 0 0.7068252 0" group="1" contype="0" conaffinity="0" material="r2_neck_roll_mat_1" type="mesh" mesh="Head_material_1" />
+              <geom pos="0 0.07 0" quat="0.7073883 0 0.7068252 0" group="1" contype="0" conaffinity="0" material="r2_neck_roll_mat_2" type="mesh" mesh="Head_material_3" />
+              <geom pos="0 0.07 0" quat="0.7073883 0 0.7068252 0" group="1" contype="0" conaffinity="0" material="r2_neck_roll_mat_3" type="mesh" mesh="Head_material_5" />
+              <geom pos="0 0.07 0" quat="0.7073883 0 0.7068252 0" group="1" contype="0" conaffinity="0" material="r2_neck_roll_mat_4" type="mesh" mesh="Head_material_7" />
+              <geom pos="0 0.07 0" quat="0.7073883 0 0.7068252 0" group="1" contype="0" conaffinity="0" material="r2_neck_roll_mat_5" type="mesh" mesh="Head_material_9" />
+              <geom pos="0 0.07 0" quat="0.7073883 0 0.7068252 0" rgba="0.9373 0.2667 0.2667 1" group="3" contype="1" conaffinity="1" type="mesh" mesh="Head" />
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+  <actuator>
+    <position name="/r2/waist/joint0_servo" joint="/r2/waist/joint0" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/left_arm/joint0_servo" joint="/r2/left_arm/joint0" kp="50" forcelimited="true" forcerange="-100 100" />
+    <position name="/r2/left_arm/joint1_servo" joint="/r2/left_arm/joint1" kp="50" forcelimited="true" forcerange="-100 100" />
+    <position name="/r2/left_arm/joint2_servo" joint="/r2/left_arm/joint2" kp="50" forcelimited="true" forcerange="-100 100" />
+    <position name="/r2/left_arm/joint3_servo" joint="/r2/left_arm/joint3" kp="50" forcelimited="true" forcerange="-100 100" />
+    <position name="/r2/left_arm/joint4_servo" joint="/r2/left_arm/joint4" kp="50" forcelimited="true" forcerange="-100 100" />
+    <position name="/r2/left_arm/joint5_servo" joint="/r2/left_arm/joint5" kp="50" forcelimited="true" forcerange="-100 100" />
+    <position name="/r2/left_arm/joint6_servo" joint="/r2/left_arm/joint6" kp="50" forcelimited="true" forcerange="-100 100" />
+    <position name="/r2/left_arm/hand/index/joint0_servo" joint="/r2/left_arm/hand/index/joint0" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/left_arm/hand/index/joint1_servo" joint="/r2/left_arm/hand/index/joint1" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/left_arm/hand/index/joint2_servo" joint="/r2/left_arm/hand/index/joint2" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/left_arm/hand/index/joint3_servo" joint="/r2/left_arm/hand/index/joint3" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/left_arm/hand/middle/joint0_servo" joint="/r2/left_arm/hand/middle/joint0" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/left_arm/hand/middle/joint1_servo" joint="/r2/left_arm/hand/middle/joint1" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/left_arm/hand/middle/joint2_servo" joint="/r2/left_arm/hand/middle/joint2" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/left_arm/hand/middle/joint3_servo" joint="/r2/left_arm/hand/middle/joint3" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/left_arm/hand/little/joint0_servo" joint="/r2/left_arm/hand/little/joint0" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/left_arm/hand/little/joint1_servo" joint="/r2/left_arm/hand/little/joint1" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/left_arm/hand/little/joint2_servo" joint="/r2/left_arm/hand/little/joint2" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/left_arm/hand/ring/joint0_servo" joint="/r2/left_arm/hand/ring/joint0" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/left_arm/hand/ring/joint1_servo" joint="/r2/left_arm/hand/ring/joint1" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/left_arm/hand/ring/joint2_servo" joint="/r2/left_arm/hand/ring/joint2" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/left_arm/hand/thumb/joint0_servo" joint="/r2/left_arm/hand/thumb/joint0" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/left_arm/hand/thumb/joint1_servo" joint="/r2/left_arm/hand/thumb/joint1" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/left_arm/hand/thumb/joint2_servo" joint="/r2/left_arm/hand/thumb/joint2" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/left_arm/hand/thumb/joint3_servo" joint="/r2/left_arm/hand/thumb/joint3" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/right_arm/joint0_servo" joint="/r2/right_arm/joint0" kp="50" forcelimited="true" forcerange="-100 100" />
+    <position name="/r2/right_arm/joint1_servo" joint="/r2/right_arm/joint1" kp="50" forcelimited="true" forcerange="-100 100" />
+    <position name="/r2/right_arm/joint2_servo" joint="/r2/right_arm/joint2" kp="50" forcelimited="true" forcerange="-100 100" />
+    <position name="/r2/right_arm/joint3_servo" joint="/r2/right_arm/joint3" kp="50" forcelimited="true" forcerange="-100 100" />
+    <position name="/r2/right_arm/joint4_servo" joint="/r2/right_arm/joint4" kp="50" forcelimited="true" forcerange="-100 100" />
+    <position name="/r2/right_arm/joint5_servo" joint="/r2/right_arm/joint5" kp="50" forcelimited="true" forcerange="-100 100" />
+    <position name="/r2/right_arm/joint6_servo" joint="/r2/right_arm/joint6" kp="50" forcelimited="true" forcerange="-100 100" />
+    <position name="/r2/right_arm/hand/index/joint0_servo" joint="/r2/right_arm/hand/index/joint0" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/right_arm/hand/index/joint1_servo" joint="/r2/right_arm/hand/index/joint1" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/right_arm/hand/index/joint2_servo" joint="/r2/right_arm/hand/index/joint2" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/right_arm/hand/index/joint3_servo" joint="/r2/right_arm/hand/index/joint3" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/right_arm/hand/middle/joint0_servo" joint="/r2/right_arm/hand/middle/joint0" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/right_arm/hand/middle/joint1_servo" joint="/r2/right_arm/hand/middle/joint1" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/right_arm/hand/middle/joint2_servo" joint="/r2/right_arm/hand/middle/joint2" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/right_arm/hand/middle/joint3_servo" joint="/r2/right_arm/hand/middle/joint3" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/right_arm/hand/little/joint0_servo" joint="/r2/right_arm/hand/little/joint0" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/right_arm/hand/little/joint1_servo" joint="/r2/right_arm/hand/little/joint1" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/right_arm/hand/little/joint2_servo" joint="/r2/right_arm/hand/little/joint2" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/right_arm/hand/ring/joint0_servo" joint="/r2/right_arm/hand/ring/joint0" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/right_arm/hand/ring/joint1_servo" joint="/r2/right_arm/hand/ring/joint1" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/right_arm/hand/ring/joint2_servo" joint="/r2/right_arm/hand/ring/joint2" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/right_arm/hand/thumb/joint0_servo" joint="/r2/right_arm/hand/thumb/joint0" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/right_arm/hand/thumb/joint1_servo" joint="/r2/right_arm/hand/thumb/joint1" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/right_arm/hand/thumb/joint2_servo" joint="/r2/right_arm/hand/thumb/joint2" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/right_arm/hand/thumb/joint3_servo" joint="/r2/right_arm/hand/thumb/joint3" kp="5000000" forcelimited="true" forcerange="-10000000 10000000" />
+    <position name="/r2/neck/joint0_servo" joint="/r2/neck/joint0" kp="5000" forcelimited="true" forcerange="-10000 10000" />
+    <position name="/r2/neck/joint1_servo" joint="/r2/neck/joint1" kp="5000" forcelimited="true" forcerange="-10000 10000" />
+    <position name="/r2/neck/joint2_servo" joint="/r2/neck/joint2" kp="5000" forcelimited="true" forcerange="-10000 10000" />
+  </actuator>
+</mujoco>

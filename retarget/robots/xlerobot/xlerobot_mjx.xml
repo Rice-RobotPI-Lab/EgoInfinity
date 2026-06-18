@@ -1,0 +1,107 @@
+<mujoco model="xlerobot_mjx">
+  <!--
+    MJX/JAX training version of XLeRobot.  Differences from xlerobot.xml:
+      - No mesh geoms (primitives only, for inertia)
+      - No jaw, no head joints — only 5 arm joints per side (10 total)
+      - torso_frame is the IK/FK root; pytorch_kinematics roots at its local
+        frame so FK positions match get_wrist_pose_torso() exactly
+      - integrator="implicitfast"
+  -->
+  <compiler angle="radian" eulerseq="XYZ"/>
+
+  <option integrator="implicitfast"/>
+
+  <default>
+    <default class="arm">
+      <joint frictionloss="0.1" armature="0.05" damping="0.5"/>
+      <position kp="20" dampratio="1" inheritrange="1" forcerange="-20 20"/>
+    </default>
+    <geom contype="0" conaffinity="0"/>
+  </default>
+
+  <worldbody>
+    <body name="base_link">
+      <inertial pos="0 0 0.38" mass="70" diaginertia="1.2 1.3 1.0"/>
+
+      <body name="torso_frame" pos="-0.135 0 0.760">
+
+        <!-- ── RIGHT ARM (robot's right: y < 0) ── -->
+        <body name="Base" pos="0 -0.133 0" euler="0 0 1.5708">
+          <inertial pos="0 0.031 0.018" mass="0.193" diaginertia="1.37e-4 1.69e-4 1.45e-4"/>
+
+          <body name="Rotation_Pitch" pos="0 -0.0452 0.0165" euler="1.5708 0 0">
+            <joint name="Rotation_R" class="arm" type="hinge" axis="0 -1 0" range="-2.1 2.1"/>
+            <inertial pos="-9.1e-5 0.059 0.031" mass="0.119" diaginertia="5.90e-5 3.21e-5 5.86e-5"/>
+
+            <body name="Upper_Arm" pos="0 0.1025 0.0306" euler="1.5708 0 0">
+              <joint name="Pitch_R" class="arm" type="hinge" axis="-1 0 0" range="-0.1 3.45"/>
+              <inertial pos="-1.7e-5 0.070 0.003" mass="0.162" diaginertia="1.67e-4 7.02e-5 2.13e-4"/>
+
+              <body name="Lower_Arm" pos="0 0.11257 0.028" euler="-1.5708 0 0">
+                <joint name="Elbow_R" class="arm" type="hinge" axis="1 0 0" range="-0.2 3.14159"/>
+                <inertial pos="-0.0034 0.0014 0.077" mass="0.148" diaginertia="1.05e-4 1.39e-4 5.09e-5"/>
+
+                <body name="Wrist_Pitch_Roll" pos="0 0.0052 0.1349" euler="-1.5708 0 0">
+                  <joint name="Wrist_Pitch_R" class="arm" type="hinge" axis="1 0 0" range="-1.8 1.8"/>
+                  <inertial pos="-0.0085 -0.035 0" mass="0.066" diaginertia="1.96e-5 2.38e-5 3.45e-5"/>
+
+                  <body name="Fixed_Jaw" pos="0 -0.0601 0" euler="0 1.5708 0">
+                    <joint name="Wrist_Roll_R" class="arm" type="hinge" axis="0 -1 0" range="-3.14159 3.14159"/>
+                    <inertial pos="0.0055 -0.028 0.0005" mass="0.093" diaginertia="4.33e-5 3.04e-5 5.02e-5"/>
+                    <body name="right_hand_frame" pos="0.01 -0.097 0" quat="0 0.7071068 0 0.7071068"/>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+
+        <!-- ── LEFT ARM (robot's left: y > 0) ── -->
+        <body name="Base_2" pos="0 0.133 0" euler="0 0 1.5708">
+          <inertial pos="0 0.031 0.018" mass="0.193" diaginertia="1.37e-4 1.69e-4 1.45e-4"/>
+
+          <body name="Rotation_Pitch_2" pos="0 -0.0452 0.0165" euler="1.5708 0 0">
+            <joint name="Rotation_L" class="arm" type="hinge" axis="0 -1 0" range="-2.1 2.1"/>
+            <inertial pos="-9.1e-5 0.059 0.031" mass="0.119" diaginertia="5.90e-5 3.21e-5 5.86e-5"/>
+
+            <body name="Upper_Arm_2" pos="0 0.1025 0.0306" euler="1.5708 0 0">
+              <joint name="Pitch_L" class="arm" type="hinge" axis="-1 0 0" range="-0.1 3.45"/>
+              <inertial pos="-1.7e-5 0.070 0.003" mass="0.162" diaginertia="1.67e-4 7.02e-5 2.13e-4"/>
+
+              <body name="Lower_Arm_2" pos="0 0.11257 0.028" euler="-1.5708 0 0">
+                <joint name="Elbow_L" class="arm" type="hinge" axis="1 0 0" range="-0.2 3.14159"/>
+                <inertial pos="-0.0034 0.0014 0.077" mass="0.148" diaginertia="1.05e-4 1.39e-4 5.09e-5"/>
+
+                <body name="Wrist_Pitch_Roll_2" pos="0 0.0052 0.1349" euler="-1.5708 0 0">
+                  <joint name="Wrist_Pitch_L" class="arm" type="hinge" axis="1 0 0" range="-1.8 1.8"/>
+                  <inertial pos="-0.0085 -0.035 0" mass="0.066" diaginertia="1.96e-5 2.38e-5 3.45e-5"/>
+
+                  <body name="Fixed_Jaw_2" pos="0 -0.0601 0" euler="0 1.5708 0">
+                    <joint name="Wrist_Roll_L" class="arm" type="hinge" axis="0 -1 0" range="-3.14159 3.14159"/>
+                    <inertial pos="0.0055 -0.028 0.0005" mass="0.093" diaginertia="4.33e-5 3.04e-5 5.02e-5"/>
+                    <body name="left_hand_frame" pos="0.01 -0.097 0" quat="0 0.7071068 0 -0.7071068"/>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+
+      </body>
+    </body>
+  </worldbody>
+
+  <actuator>
+    <position name="Rotation_R"    joint="Rotation_R"    class="arm"/>
+    <position name="Pitch_R"       joint="Pitch_R"       class="arm"/>
+    <position name="Elbow_R"       joint="Elbow_R"       class="arm"/>
+    <position name="Wrist_Pitch_R" joint="Wrist_Pitch_R" class="arm"/>
+    <position name="Wrist_Roll_R"  joint="Wrist_Roll_R"  class="arm"/>
+    <position name="Rotation_L"    joint="Rotation_L"    class="arm"/>
+    <position name="Pitch_L"       joint="Pitch_L"       class="arm"/>
+    <position name="Elbow_L"       joint="Elbow_L"       class="arm"/>
+    <position name="Wrist_Pitch_L" joint="Wrist_Pitch_L" class="arm"/>
+    <position name="Wrist_Roll_L"  joint="Wrist_Roll_L"  class="arm"/>
+  </actuator>
+
+</mujoco>

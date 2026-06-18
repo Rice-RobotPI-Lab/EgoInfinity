@@ -1,0 +1,71 @@
+#!/bin/bash
+# EgoInfinity environment template.
+# Copy to a private location (NOT inside the git repo) and `source` it before
+# launching anything:
+#
+#     cp activate.sh.example ~/egoinfinity_env.sh
+#     # edit paths below to match your setup
+#     source ~/egoinfinity_env.sh
+#
+# Required edits are marked with REQUIRED.  Optional ones default sensibly.
+
+# ── (REQUIRED) Activate the main egoinfinity conda env ──────────────────────
+# Either set EGOINFINITY_CONDA_ENV to a full env path / name, or pre-activate
+# the env yourself before sourcing this file.
+EGOINFINITY_CONDA_ENV="${EGOINFINITY_CONDA_ENV:-egoinfinity}"
+
+# Try `module load` (HPC clusters) — silent if unavailable.
+module load miniforge3-python 2>/dev/null || true
+eval "$(conda shell.bash hook)" 2>/dev/null || true
+conda activate "$EGOINFINITY_CONDA_ENV" 2>/dev/null || \
+    echo "[activate] conda env '$EGOINFINITY_CONDA_ENV' not found; continuing"
+
+# ── (Optional) HuggingFace cache ────────────────────────────────────────
+# Set this to a fast local SSD/NVMe path; weights are large (~17 GB total
+# across MoGe-2 / DINOv2 / SAM3 / MEMFOF).
+export HF_HOME="${HF_HOME:-$HOME/.cache/huggingface}"
+# After first download, set offline to avoid HEAD-request hangs:
+# export HF_HUB_OFFLINE=1
+# export TRANSFORMERS_OFFLINE=1
+
+# ── (Optional) Pretrained checkpoint dir ───────────────────────────────
+# WiLoR / SAM2 / infiller .pt files.  Default is `<repo>/pretrained_models`,
+# populated by `bash scripts/setup_weights.sh`.  Override to share weights
+# across multiple repos / users.
+# export EGOINFINITY_CKPT_DIR=/path/to/shared/ckpts
+
+# ── SAM3 (sibling repo + separate conda env) ───────────────────────────
+# See README.md "SAM3 Auto Object Detection".  Both vars optional —
+# defaults: SAM3_PYTHON=~/miniconda3/envs/sam3/bin/python
+#           SAM3_REPO=<repo_parent>/sam3
+# export SAM3_PYTHON=/path/to/sam3/env/bin/python
+# export SAM3_REPO=/path/to/sam3-repo
+
+# ── SAM 3D Objects (sibling repo + separate conda env) ─────────────────
+# Defaults: SAM3D_PYTHON=~/miniconda3/envs/sam3d-objects/bin/python
+#           SAM3D_REPO=<repo_parent>/sam-3d-objects
+# export SAM3D_PYTHON=/path/to/sam3d-objects/env/bin/python
+# export SAM3D_REPO=/path/to/sam-3d-objects-repo
+# On Delta-style clusters with slow shared FS, bump the worker
+# spawn deadline (default 240s):
+# export SAM3D_SPAWN_TIMEOUT=600
+
+# ── Multi-host phase-skip env vars (see docs/MULTI_HOST.md §2) ─────────
+# Defaults below match A100-style "run everything"; 4070 Ti should
+# override RUN_SAM3D=0 (no fit) and may override RUN_TRACK=0.
+# export EGOINFINITY_RUN_SAM3D=1        # scripts/exo_pipeline.py Phase D-sam3d
+# export EGOINFINITY_RUN_TRACK=1        # scripts/exo_pipeline.py Phase D-track
+# export EGOINFINITY_LOW_VRAM=0         # lazy-load SAM3 / SAM3D workers on small GPUs
+
+# ── (Optional) yt-dlp cookies for Action100M browser downloads ─────────
+# YouTube anti-bot blocks anonymous IPs.  Export cookies from a logged-in
+# browser session (Netscape format) and point this at the file.  See
+# PIPELINE.md §8 "YouTube cookies (Action100M downloader)".
+#   export YTDLP_COOKIES_FROM_BROWSER=firefox      # auto-extract from browser
+#   export YTDLP_COOKIES_FILE=/path/to/cookies.txt # or use exported file
+
+echo "[activate] egoinfinity env activated"
+echo "  python:  $(which python)"
+echo "  HF_HOME: $HF_HOME"
+nvidia-smi --query-gpu=name --format=csv,noheader 2>/dev/null \
+    | head -1 | sed 's/^/  GPU:    /'

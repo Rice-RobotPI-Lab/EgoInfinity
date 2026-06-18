@@ -1,0 +1,51 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  # Ruff lint is currently disabled. The repo has ~320 pre-existing style
+  # violations (mostly E501 / unused imports in legacy tools/) that would
+  # need a sweeping reformat to fix. The badge is hidden until that lands.
+  # Re-enable by uncommenting the block below.
+  #
+  # lint:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/setup-python@v5
+  #       with:
+  #         python-version: "3.10"
+  #     - name: Install ruff
+  #       run: pip install ruff
+  #     - name: ruff check
+  #       run: ruff check .
+
+  import-smoke:
+    # Verifies the package layout is sound — does NOT pull torch / wilor /
+    # sam2 / etc. (heavy + needs CUDA).  Just checks that pyproject.toml is
+    # valid and that the top-level package imports without runtime deps.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: Install build tools + minimal deps
+        run: |
+          pip install --upgrade pip setuptools wheel
+          # No-deps install proves pyproject.toml is well-formed.
+          pip install -e . --no-deps
+      - name: Verify package metadata
+        run: |
+          python -c "from importlib.metadata import metadata; print(metadata('egoinfinity')['Name'])"
+      - name: Smoke-import config (no torch needed for path resolution)
+        # config.py does `import os` + path joins; skips runtime model code.
+        run: |
+          python -c "import sys; sys.path.insert(0, '.'); \
+                     import egoinfinity.pipeline.config as c; \
+                     print('REPO_ROOT:', c.REPO_ROOT); \
+                     print('CKPT_DIR:', c.CKPT_DIR); \
+                     print('WILOR_CFG:', c.WILOR_CFG)"

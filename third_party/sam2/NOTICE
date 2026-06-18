@@ -1,0 +1,15 @@
+SAM 2: Segment Anything in Images and Videos
+
+This directory contains a vendored fork of Meta's SAM 2 codebase, used
+by EgoInfinity for streaming object mask tracking in Phase D.
+
+Upstream: https://github.com/facebookresearch/sam2
+Original License: Apache License, Version 2.0 (see LICENSE)
+
+Modifications, where present, are localized engineering integrations
+(IPC worker bindings, mask-cache helpers) and do not alter the model or
+training procedure.
+
+Citation:
+  Ravi, N., et al. "SAM 2: Segment Anything in Images and Videos."
+  arXiv:2408.00714, 2024.

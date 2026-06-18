@@ -1,0 +1,224 @@
+<mujoco model="xlerobot">
+  <!--
+    Visualization-quality XLeRobot.  Converted from URDF:
+      simulation/Maniskill/assets/xlerobot/xlerobot.urdf
+    Changes from URDF:
+      - Mobile base joints (root_x/y/z) removed; base_link locked to world
+      - eulerseq="XYZ" so body euler values map 1-to-1 from URDF rpy
+      - torso_frame added at base_link origin (IK/FK reference)
+      - right_hand_frame added at Fixed_Jaw tip  (arm 1 = robot's right arm)
+      - left_hand_frame  added at Fixed_Jaw_2 tip (arm 2 = robot's left arm)
+      - All geoms passive (contype/conaffinity 0)
+  -->
+  <compiler angle="radian" eulerseq="XYZ" meshdir="./meshes/" inertiafromgeom="true"/>
+
+  <asset>
+    <!-- arm meshes -->
+    <mesh name="Base"                     file="Base.stl"/>
+    <mesh name="Base_Motor"               file="Base_Motor.stl"/>
+    <mesh name="Rotation_Pitch"           file="Rotation_Pitch.stl"/>
+    <mesh name="Rotation_Pitch_Motor"     file="Rotation_Pitch_Motor.stl"/>
+    <mesh name="Upper_Arm"                file="Upper_Arm.stl"/>
+    <mesh name="Upper_Arm_Motor"          file="Upper_Arm_Motor.stl"/>
+    <mesh name="Lower_Arm"                file="Lower_Arm.stl"/>
+    <mesh name="Lower_Arm_Motor"          file="Lower_Arm_Motor.stl"/>
+    <mesh name="Wrist_Pitch_Roll"         file="Wrist_Pitch_Roll.stl"/>
+    <mesh name="Wrist_Pitch_Roll_Motor"   file="Wrist_Pitch_Roll_Motor.stl"/>
+    <mesh name="Fixed_Jaw"                file="Fixed_Jaw.stl"/>
+    <mesh name="Fixed_Jaw_Motor"          file="Fixed_Jaw_Motor.stl"/>
+    <mesh name="Fixed_Jaw_part1_cvx"      file="Fixed_Jaw_part1.ply.convex.stl"/>
+    <mesh name="Fixed_Jaw_part2_cvx"      file="Fixed_Jaw_part2.ply.convex.stl"/>
+    <mesh name="Moving_Jaw"               file="Moving_Jaw.stl"/>
+    <mesh name="Moving_Jaw_part1_cvx"     file="Moving_Jaw_part1.ply.convex.stl"/>
+    <mesh name="Moving_Jaw_part2_cvx"     file="Moving_Jaw_part2.ply.convex.stl"/>
+    <mesh name="Moving_Jaw_part3_cvx"     file="Moving_Jaw_part3.ply.convex.stl"/>
+    <!-- camera meshes (mm -> m) -->
+    <mesh name="Camera1"  file="XLeRobot_camera1.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="Camera2"  file="XLeRobot_camera2.stl" scale="0.001 0.001 0.001"/>
+    <!-- raskog cart body + wheels (scale 0.9/1.0/0.9 mm -> m) -->
+    <mesh name="raskogbody"   file="raskogbody.stl"   scale="0.0009 0.001 0.0009"/>
+    <mesh name="raskogwheel1" file="raskogwheel1.stl" scale="0.0009 0.001 0.0009"/>
+    <mesh name="raskogwheel2" file="raskogwheel2.stl" scale="0.0009 0.001 0.0009"/>
+    <!-- head / neck meshes (mm -> m) -->
+    <mesh name="topbase1"  file="topbase1.stl"  scale="0.001 0.001 0.001"/>
+    <mesh name="topbase2"  file="topbase2.stl"  scale="0.001 0.001 0.001"/>
+    <mesh name="tophead3"  file="tophead3.stl"  scale="0.001 0.001 0.001"/>
+    <mesh name="tophead4"  file="tophead4.stl"  scale="0.001 0.001 0.001"/>
+    <mesh name="tophead5"  file="tophead5.stl"  scale="0.001 0.001 0.001"/>
+    <mesh name="tophead6"  file="tophead6.stl"  scale="0.001 0.001 0.001"/>
+
+    <!-- materials -->
+    <material name="white" rgba="0.3 0.3 0.3 1"/>
+    <material name="grey"  rgba="0.6 0.6 0.6 1"/>
+    <material name="blue"  rgba="0.2 0.3 0.6 1"/>
+    <material name="motor" rgba="0.02 0.02 0.02 1"/>
+  </asset>
+
+  <default>
+    <default class="arm">
+      <joint frictionloss="0.1" armature="0.05" damping="0.5"/>
+      <position kp="20" dampratio="1" forcerange="-20 20" inheritrange="1"/>
+    </default>
+    <default class="head">
+      <joint frictionloss="0.05" armature="0.05" damping="0.5"/>
+      <position kp="50" dampratio="1" forcerange="-10 10" inheritrange="1"/>
+    </default>
+    <geom contype="0" conaffinity="0" group="1"/>
+  </default>
+
+  <worldbody>
+    <body name="base_link">
+
+      <!-- Raskog cart body visuals (at URDF visual origin xyz="-0.01668 0.502 0.895" rpy="1.5708 0 0") -->
+      <geom type="mesh" mesh="raskogbody"   pos="-0.01668 0.502 0.895" euler="1.5708 0 0" material="blue"/>
+      <geom type="mesh" mesh="raskogwheel1" pos="-0.01668 0.502 0.895" euler="1.5708 0 0" material="grey"/>
+      <geom type="mesh" mesh="raskogwheel2" pos="-0.01668 0.502 0.895" euler="1.5708 0 0" material="motor"/>
+
+      <!-- torso_frame: IK/FK reference (midpoint between arm bases) -->
+      <body name="torso_frame" pos="-0.135 0 0.760"/>
+
+      <!-- ── RIGHT ARM (URDF arm 1: Base, Fixed_Jaw → right_hand_frame) ── -->
+      <body name="Base" pos="-0.135 -0.133 0.760" euler="0 0 1.5708">
+        <geom type="mesh" mesh="Base"       material="white"/>
+        <geom type="mesh" mesh="Base_Motor" material="motor"/>
+
+        <body name="Rotation_Pitch" pos="0 -0.0452 0.0165" euler="1.5708 0 0">
+          <joint name="Rotation_R" class="arm" type="hinge" axis="0 -1 0" range="-2.1 2.1"/>
+          <geom type="mesh" mesh="Rotation_Pitch"       material="white"/>
+          <geom type="mesh" mesh="Rotation_Pitch_Motor" material="motor"/>
+
+          <body name="Upper_Arm" pos="0 0.1025 0.0306" euler="1.5708 0 0">
+            <joint name="Pitch_R" class="arm" type="hinge" axis="-1 0 0" range="-0.1 3.45"/>
+            <geom type="mesh" mesh="Upper_Arm"       material="white"/>
+            <geom type="mesh" mesh="Upper_Arm_Motor" material="motor"/>
+
+            <body name="Lower_Arm" pos="0 0.11257 0.028" euler="-1.5708 0 0">
+              <joint name="Elbow_R" class="arm" type="hinge" axis="1 0 0" range="-0.2 3.14159"/>
+              <geom type="mesh" mesh="Lower_Arm"       material="white"/>
+              <geom type="mesh" mesh="Lower_Arm_Motor" material="motor"/>
+
+              <body name="Wrist_Pitch_Roll" pos="0 0.0052 0.1349" euler="-1.5708 0 0">
+                <joint name="Wrist_Pitch_R" class="arm" type="hinge" axis="1 0 0" range="-1.8 1.8"/>
+                <geom type="mesh" mesh="Wrist_Pitch_Roll"       material="white"/>
+                <geom type="mesh" mesh="Wrist_Pitch_Roll_Motor" material="motor"/>
+
+                <body name="Fixed_Jaw" pos="0 -0.0601 0" euler="0 1.5708 0">
+                  <joint name="Wrist_Roll_R" class="arm" type="hinge" axis="0 -1 0" range="-3.14159 3.14159"/>
+                  <geom type="mesh" mesh="Fixed_Jaw"       material="white"/>
+                  <geom type="mesh" mesh="Fixed_Jaw_Motor" material="motor"/>
+
+                  <!-- right EE marker at gripper tip -->
+                  <body name="right_hand_frame" pos="0.01 -0.097 0" quat="0 0.7071068 0 0.7071068"/>
+
+                  <body name="Moving_Jaw_R" pos="-0.0202 -0.0244 0" euler="3.1416 0 3.33">
+                    <joint name="Jaw_R" class="arm" type="hinge" axis="0 0 1" range="0 1.7"/>
+                    <geom type="mesh" mesh="Moving_Jaw" material="white"/>
+                  </body>
+
+                  <body name="Right_Arm_Camera" pos="0 -0.02 0.05" euler="1.5708 0 -1.5708">
+                    <geom type="mesh" mesh="Camera1" pos="-0.015 -0.026 0" material="white"/>
+                    <geom type="mesh" mesh="Camera2" pos="-0.015 -0.026 0" material="motor"/>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+
+      <!-- ── LEFT ARM (URDF arm 2: Base_2, Fixed_Jaw_2 → left_hand_frame) ── -->
+      <body name="Base_2" pos="-0.135 0.133 0.760" euler="0 0 1.5708">
+        <geom type="mesh" mesh="Base"       material="white"/>
+        <geom type="mesh" mesh="Base_Motor" material="motor"/>
+
+        <body name="Rotation_Pitch_2" pos="0 -0.0452 0.0165" euler="1.5708 0 0">
+          <joint name="Rotation_L" class="arm" type="hinge" axis="0 -1 0" range="-2.1 2.1"/>
+          <geom type="mesh" mesh="Rotation_Pitch"       material="white"/>
+          <geom type="mesh" mesh="Rotation_Pitch_Motor" material="motor"/>
+
+          <body name="Upper_Arm_2" pos="0 0.1025 0.0306" euler="1.5708 0 0">
+            <joint name="Pitch_L" class="arm" type="hinge" axis="-1 0 0" range="-0.1 3.45"/>
+            <geom type="mesh" mesh="Upper_Arm"       material="white"/>
+            <geom type="mesh" mesh="Upper_Arm_Motor" material="motor"/>
+
+            <body name="Lower_Arm_2" pos="0 0.11257 0.028" euler="-1.5708 0 0">
+              <joint name="Elbow_L" class="arm" type="hinge" axis="1 0 0" range="-0.2 3.14159"/>
+              <geom type="mesh" mesh="Lower_Arm"       material="white"/>
+              <geom type="mesh" mesh="Lower_Arm_Motor" material="motor"/>
+
+              <body name="Wrist_Pitch_Roll_2" pos="0 0.0052 0.1349" euler="-1.5708 0 0">
+                <joint name="Wrist_Pitch_L" class="arm" type="hinge" axis="1 0 0" range="-1.8 1.8"/>
+                <geom type="mesh" mesh="Wrist_Pitch_Roll"       material="white"/>
+                <geom type="mesh" mesh="Wrist_Pitch_Roll_Motor" material="motor"/>
+
+                <body name="Fixed_Jaw_2" pos="0 -0.0601 0" euler="0 1.5708 0">
+                  <joint name="Wrist_Roll_L" class="arm" type="hinge" axis="0 -1 0" range="-3.14159 3.14159"/>
+                  <geom type="mesh" mesh="Fixed_Jaw"       material="white"/>
+                  <geom type="mesh" mesh="Fixed_Jaw_Motor" material="motor"/>
+
+                  <!-- left EE marker at gripper tip -->
+                  <body name="left_hand_frame" pos="0.01 -0.097 0" quat="0 0.7071068 0 -0.7071068"/>
+
+                  <body name="Moving_Jaw_L" pos="-0.0202 -0.0244 0" euler="3.1416 0 3.33">
+                    <joint name="Jaw_L" class="arm" type="hinge" axis="0 0 1" range="0 1.7"/>
+                    <geom type="mesh" mesh="Moving_Jaw" material="white"/>
+                  </body>
+
+                  <body name="Left_Arm_Camera" pos="0 -0.02 0.05" euler="1.5708 0 -1.5708">
+                    <geom type="mesh" mesh="Camera1" pos="-0.015 -0.026 0" material="white"/>
+                    <geom type="mesh" mesh="Camera2" pos="-0.015 -0.026 0" material="motor"/>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+
+      <!-- ── HEAD / NECK ── -->
+      <body name="top_base_link" pos="0 0 0.73">
+        <geom type="mesh" mesh="topbase1" pos="0.016 -0.006 -0.727" material="white"/>
+        <geom type="mesh" mesh="topbase2" pos="0.016 -0.006 -0.727" material="motor"/>
+
+        <body name="head_pan_link" pos="-0.178 0 0">
+          <joint name="head_pan" class="head" type="hinge" axis="0 0 1" range="-1.57 1.57"/>
+          <geom type="mesh" mesh="tophead3" pos="0.194 -0.006 -0.73"  material="white"/>
+          <geom type="mesh" mesh="tophead4" pos="0.194 -0.006 -0.73"  material="motor"/>
+
+          <body name="head_tilt_link" pos="0.031 0 0.43815">
+            <joint name="head_tilt" class="head" type="hinge" axis="0 1 0" range="-0.76 1.45"/>
+            <geom type="mesh" mesh="tophead5" pos="0.16265 -0.006 -1.16815" material="white"/>
+            <geom type="mesh" mesh="tophead6" pos="0.16265 -0.006 -1.16815" material="motor"/>
+
+            <body name="head_camera_link" pos="0.055 0 0.0225">
+              <body name="head_camera_rgb_frame" pos="0 0.02 0"/>
+              <body name="head_camera_depth_frame" pos="0 0.045 0"/>
+            </body>
+          </body>
+        </body>
+      </body>
+
+    </body>
+  </worldbody>
+
+  <actuator>
+    <!-- right arm -->
+    <position name="Rotation_R"   joint="Rotation_R"   class="arm"/>
+    <position name="Pitch_R"      joint="Pitch_R"      class="arm"/>
+    <position name="Elbow_R"      joint="Elbow_R"      class="arm"/>
+    <position name="Wrist_Pitch_R" joint="Wrist_Pitch_R" class="arm"/>
+    <position name="Wrist_Roll_R" joint="Wrist_Roll_R" class="arm"/>
+    <position name="Jaw_R"        joint="Jaw_R"        class="arm"/>
+    <!-- left arm -->
+    <position name="Rotation_L"   joint="Rotation_L"   class="arm"/>
+    <position name="Pitch_L"      joint="Pitch_L"      class="arm"/>
+    <position name="Elbow_L"      joint="Elbow_L"      class="arm"/>
+    <position name="Wrist_Pitch_L" joint="Wrist_Pitch_L" class="arm"/>
+    <position name="Wrist_Roll_L" joint="Wrist_Roll_L" class="arm"/>
+    <position name="Jaw_L"        joint="Jaw_L"        class="arm"/>
+    <!-- head -->
+    <position name="head_pan"  joint="head_pan"  class="head"/>
+    <position name="head_tilt" joint="head_tilt" class="head"/>
+  </actuator>
+
+</mujoco>
