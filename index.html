@@ -1533,8 +1533,10 @@ figure.media figcaption b { color: var(--ink); font-weight: 600; }
 
 .media-grid {
   display: grid; gap: 14px;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
 }
+@media (max-width: 900px) { .media-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .media-grid { grid-template-columns: 1fr; } }
 .media-grid .ph-cap {
   position: absolute; top: 0; left: 0; right: 0;
   padding: 6px 10px;
