@@ -1,0 +1,2004 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>EgoInfinity / Method &amp; Experiments</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="description" content="EgoInfinity: a web-scale 4D hand-object interaction data engine. Pipeline, cross-embodiment retargeting, and real-robot experiments." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500&display=swap" rel="stylesheet">
+<!-- CSS inlined (HF private-space sub-pages don't resolve relative stylesheet links). Source of truth: css/styles.css + css/project.css; re-inline if those change. -->
+<style>
+/* ===== css/styles.css ===== */
+/* EgoInfinity Dataset Viewer - adapted from design/project/EgoInfinity Explorer.html */
+:root {
+  --paper: oklch(0.975 0.008 80);
+  --paper-2: oklch(0.955 0.01 80);
+  --ink: oklch(0.18 0.01 60);
+  --ink-2: oklch(0.38 0.01 60);
+  --ink-3: oklch(0.58 0.01 60);
+  --rule: oklch(0.88 0.01 70);
+  --rule-2: oklch(0.82 0.01 70);
+  --accent: oklch(0.68 0.18 40);
+  --accent-ink: oklch(0.32 0.12 40);
+  --chip: oklch(0.93 0.012 80);
+  --ok: oklch(0.58 0.12 150);
+}
+[data-theme="noir"] {
+  --paper: oklch(0.16 0.008 260);
+  --paper-2: oklch(0.20 0.01 260);
+  --ink: oklch(0.96 0.006 80);
+  --ink-2: oklch(0.78 0.01 70);
+  --ink-3: oklch(0.58 0.01 70);
+  --rule: oklch(0.30 0.01 260);
+  --rule-2: oklch(0.38 0.01 260);
+  --accent: oklch(0.78 0.18 70);
+  --accent-ink: oklch(0.90 0.14 70);
+  --chip: oklch(0.24 0.01 260);
+}
+[data-theme="ink"] {
+  --paper: oklch(0.97 0.006 230);
+  --paper-2: oklch(0.94 0.01 230);
+  --ink: oklch(0.20 0.04 260);
+  --ink-2: oklch(0.40 0.03 260);
+  --ink-3: oklch(0.60 0.02 260);
+  --rule: oklch(0.86 0.015 240);
+  --rule-2: oklch(0.78 0.015 240);
+  --accent: oklch(0.52 0.16 260);
+  --accent-ink: oklch(0.32 0.14 260);
+  --chip: oklch(0.92 0.015 240);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+.mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+
+/* topbar */
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 28px;
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper);
+  position: sticky; top: 0; z-index: 30;
+}
+.brand {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 600; letter-spacing: -0.01em;
+  font-size: 13px;
+}
+.brand-mark {
+  width: 22px; height: 22px; position: relative;
+  border: 1.5px solid var(--ink); border-radius: 50%;
+}
+.brand-mark::after {
+  content: ''; position: absolute; inset: 4px;
+  border: 1.5px solid var(--ink); border-radius: 50%;
+  border-left-color: transparent; border-top-color: transparent;
+  transform: rotate(-20deg);
+}
+.brand-mark::before {
+  content: ''; position: absolute; width: 3px; height: 3px;
+  background: var(--accent); border-radius: 50%;
+  top: 50%; left: 50%; transform: translate(-50%,-50%);
+}
+.brand-sub { color: var(--ink-3); font-weight: 400; margin-left: 6px; }
+.topbar-right { display: flex; align-items: center; gap: 18px; font-size: 12px; }
+.topbar-right a { color: var(--ink-2); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+.topbar-right a:hover { color: var(--ink); }
+.topbar-right .pill {
+  border: 1px solid var(--rule-2); border-radius: 99px;
+  padding: 5px 10px; font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; color: var(--ink-2);
+  display: inline-flex; gap: 6px; align-items: center;
+}
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); }
+
+/* hero */
+.hero {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--rule);
+  /* full-bleed: video + scrim span the whole viewport width;
+     the text is re-constrained to the page width by .hero-inner below. */
+}
+.hero-inner {
+  position: relative; z-index: 2;
+  max-width: 1480px; margin: 0 auto;
+  padding: 64px 28px 52px;
+  min-height: 480px;
+  display: flex;
+  align-items: center;            /* vertically center the text over the video */
+  justify-content: space-between;
+  gap: 48px;
+  flex-wrap: wrap;
+}
+/* Full-cover background video (10s loop). Autoplay needs muted + playsinline. */
+.hero-bg {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  /* nudge-zoom to clip thin black bars baked into the source clip; bump if
+     they still peek through (overflow:hidden on .hero crops the overscan). */
+  transform: scale(1.06);
+  z-index: 0;
+}
+/* Paper-coloured veil between video and text. Heavier behind the text (left),
+   lighter on the right so the clip stays visible. Tune the % to taste. */
+.hero-scrim {
+  position: absolute; inset: 0;
+  z-index: 1;
+  /* uniform paper veil - same opacity everywhere (tune the %). */
+  background: color-mix(in oklch, var(--paper) 66%, transparent);
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 820px;
+  flex: 1 1 520px;
+}
+/* Right-side keyword column - mono kicker + Fraunces phrase, matching the
+   "001 /" eyebrow system. Paper text-glow keeps it readable over the video. */
+.hero-stats {
+  position: relative; z-index: 2;
+  flex: 0 0 auto;
+  display: flex; flex-direction: column; gap: 22px;
+  text-align: right;
+}
+.hero-stat { display: flex; flex-direction: column; gap: 5px; }
+.hero-stat-kicker {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--accent-ink);
+}
+.hero-stat-key {
+  font-family: 'Fraunces', 'Inter', serif;
+  font-weight: 400;
+  font-size: clamp(26px, 2.9vw, 40px);
+  line-height: 1.08; letter-spacing: -0.01em;
+  color: var(--ink);
+  text-shadow: 0 1px 16px var(--paper), 0 0 3px var(--paper);
+}
+.hero-stat-key sup { font-size: 0.5em; color: var(--accent-ink); }
+.hero-stat-note {
+  margin-top: 4px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px; color: var(--ink-3);
+  text-shadow: 0 1px 10px var(--paper);
+}
+.hero-links {
+  display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px;
+  margin-top: 20px;
+}
+@media (max-width: 720px) {
+  .hero-stats { text-align: left; }
+  .hero-links { justify-content: flex-start; }
+}
+.eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--ink-3);
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 22px;
+}
+.eyebrow::before { content: ''; width: 22px; height: 1px; background: var(--ink-3); }
+h1 {
+  font-family: 'Fraunces', 'Inter', serif;
+  font-weight: 400;
+  font-size: clamp(44px, 6vw, 84px);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  margin: 0 0 20px;
+  color: var(--ink);
+}
+h1 em { font-style: italic; color: var(--accent-ink); }
+.hero-subtitle {
+  font-family: 'Fraunces', 'Inter', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(18px, 2vw, 24px);
+  line-height: 1.3;
+  letter-spacing: -0.005em;
+  color: var(--accent-ink);
+  margin: -8px 0 22px;
+  max-width: 56ch;
+}
+.hero-lead {
+  font-size: 17px; color: var(--ink-2);
+  max-width: 52ch; margin: 0 0 14px;
+}
+.hero-lead:last-of-type { margin-bottom: 28px; }
+.hero-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn-icon {
+  width: 16px; height: 16px;
+  flex-shrink: 0;
+  display: inline-block;
+  vertical-align: -3px;
+}
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 16px; border-radius: 2px;
+  border: 1px solid var(--ink);
+  background: var(--ink); color: var(--paper);
+  font-size: 13px; font-weight: 500;
+  cursor: pointer; text-decoration: none;
+  font-family: inherit;
+  transition: transform 0.15s;
+}
+.btn:hover { transform: translate(-1px,-1px); box-shadow: 2px 2px 0 var(--ink); }
+.btn.ghost { background: transparent; color: var(--ink); }
+.btn .mono { font-size: 11px; opacity: 0.7; }
+
+.hero-side { display: flex; flex-direction: column; gap: 14px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; }
+.hero-meta {
+  display: grid; grid-template-columns: auto 1fr; gap: 8px 16px;
+  padding: 18px 20px;
+  border: 1px solid var(--rule);
+  background: var(--paper-2);
+}
+.hero-meta dt { color: var(--ink-3); }
+.hero-meta dd { margin: 0; color: var(--ink); }
+.hero-partners { display: flex; gap: 6px; flex-wrap: wrap; }
+.partner { padding: 4px 9px; border: 1px solid var(--rule-2); font-size: 11px; color: var(--ink-2); }
+
+/* Promo video placeholder (right column of the hero) */
+.promo-video {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.promo-video-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: var(--ink-3);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+.promo-video-label { text-transform: uppercase; }
+
+/* Release-info block above the footer (release stats + pipeline stages) */
+.release-info {
+  max-width: 1480px;
+  margin: 0 auto;
+  padding: 40px 28px 32px;
+  border-top: 1px solid var(--rule);
+}
+.release-info-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: 32px;
+  align-items: start;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+}
+@media (max-width: 880px) {
+  .release-info-grid { grid-template-columns: 1fr; }
+}
+
+/* sections */
+.section {
+  max-width: 1480px; margin: 0 auto;
+  padding: 56px 28px;
+  border-bottom: 1px solid var(--rule);
+}
+.section-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 28px; gap: 24px; flex-wrap: wrap;
+}
+.section-title {
+  font-family: 'Fraunces', serif;
+  font-size: 32px; font-weight: 400;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.section-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; color: var(--ink-3);
+  letter-spacing: 0.1em;
+}
+.section-note { color: var(--ink-2); max-width: 60ch; font-size: 14px; }
+
+/* showcase: thumbnail grid (first-frame jpg). 3 cols × 4 rows = 12 / page. */
+.showcase {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+@media (min-width: 1100px) {
+  .showcase { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 1099px) {
+  .showcase { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 800px) {
+  .showcase { grid-template-columns: repeat(2, 1fr); }
+}
+.clip {
+  position: relative; aspect-ratio: 16/10;
+  background: var(--paper-2);
+  overflow: hidden; cursor: pointer;
+  border-radius: 14px;
+  border: 1px solid var(--rule);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.clip:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+.clip.selected { box-shadow: 0 0 0 2px var(--accent); }
+.clip img, .clip video {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; background: var(--paper-2);
+  display: block;
+}
+.clip video { opacity: 0; transition: opacity 0.15s; }
+.clip:hover video { opacity: 1; }
+.clip-tag {
+  position: absolute; top: 10px; left: 10px;
+  padding: 3px 7px;
+  background: rgba(0,0,0,0.55); color: white;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; letter-spacing: 0.05em;
+  border-radius: 3px;
+}
+.clip-label {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 12px 14px;
+  background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+  color: white;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px; font-weight: 500;
+  display: flex; justify-content: space-between; align-items: end; gap: 8px;
+  pointer-events: none;
+  transition: opacity 0.16s ease;
+}
+.clip-label .clip-sub {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; opacity: 0.85; font-weight: 400;
+}
+
+/* hover overlay: replaces clip-label on hover, shows table-style metadata */
+.clip-overlay {
+  position: absolute; inset: 0;
+  padding: 16px 18px;
+  background: linear-gradient(170deg, rgba(8,12,18,0.18) 0%, rgba(12,18,28,0.34) 60%, rgba(8,12,18,0.55) 100%);
+  color: rgba(255,255,255,0.96);
+  text-shadow: 0 1px 3px rgba(0,0,0,0.55);
+  display: flex; flex-direction: column; gap: 6px;
+  opacity: 0; transition: opacity 0.16s ease;
+  pointer-events: none;
+  z-index: 2;
+  font-family: 'Inter', sans-serif;
+}
+.clip:hover .clip-overlay { opacity: 1; }
+.clip:hover .clip-label  { opacity: 0; }
+.clip-overlay .ov-title {
+  font-family: 'Fraunces', serif;
+  font-size: 17px;
+  letter-spacing: -0.005em;
+  line-height: 1.2;
+  color: white;
+}
+.clip-overlay .ov-actor {
+  font-size: 10.5px;
+  color: white;
+  font-family: 'IBM Plex Mono', monospace;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.clip-overlay .ov-objects {
+  font-size: 10.5px;
+  color: white;
+  font-family: 'IBM Plex Mono', monospace;
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.clip-overlay .ov-meta {
+  margin-top: auto;
+  display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  color: rgba(255,255,255,0.85);
+  padding-top: 8px;
+  border-top: 1px solid rgba(255,255,255,0.12);
+}
+.clip-overlay .ov-meta strong { color: white; font-weight: 500; }
+.clip-overlay .ov-meta .ov-dot { opacity: 0.4; }
+.clip-overlay .ov-grasp {
+  display: inline-block;
+  padding: 2px 7px;
+  background: var(--accent);
+  color: oklch(0.18 0.05 40);
+  border-radius: 3px;
+  font-size: 9.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.clip-overlay .ov-trust {
+  color: rgba(255,255,255,0.6);
+}
+
+/* pagination */
+.pagination {
+  display: flex; gap: 6px; align-items: center;
+  margin-top: 22px; padding-top: 16px;
+  border-top: 1px solid var(--rule);
+  flex-wrap: wrap;
+}
+.pg-btn {
+  padding: 6px 12px;
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+  border: 1px solid var(--rule); background: var(--paper);
+  color: var(--ink-2); cursor: pointer;
+}
+.pg-btn:hover:not(:disabled) { color: var(--ink); border-color: var(--ink-2); }
+.pg-btn:disabled { color: var(--ink-3); opacity: 0.4; cursor: not-allowed; }
+.pg-pages { display: flex; gap: 4px; }
+.pg-pages .pg-page {
+  min-width: 28px; padding: 6px 8px;
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+  border: 1px solid var(--rule); background: var(--paper);
+  color: var(--ink-2); cursor: pointer; text-align: center;
+}
+.pg-pages .pg-page[aria-current="true"] {
+  background: var(--ink); color: var(--paper); border-color: var(--ink);
+}
+.pg-pages .pg-page:hover:not([aria-current="true"]) { color: var(--ink); border-color: var(--ink-2); }
+.pg-pages .pg-ellipsis {
+  padding: 6px 4px;
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+  color: var(--ink-3);
+}
+.pg-info {
+  margin-left: auto;
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+  color: var(--ink-3);
+}
+
+/* viser launch overlay */
+.viser-overlay {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(10,14,22,0.6);
+  color: rgba(255,255,255,0.85);
+  font-family: 'IBM Plex Mono', monospace; font-size: 12px;
+  backdrop-filter: blur(6px);
+  text-align: center; padding: 24px;
+  pointer-events: none;
+}
+.viser-overlay-inner { width: 100%; max-width: 460px; }
+.viser-overlay-title {
+  font-family: 'Fraunces', serif; font-size: 20px; color: white;
+  margin-bottom: 8px; letter-spacing: -0.005em;
+}
+.viser-overlay-sub {
+  opacity: 0.78; line-height: 1.5;
+}
+.viser-progress {
+  position: relative; height: 2px;
+  background: rgba(255,255,255,0.12);
+  overflow: hidden;
+  margin: 18px auto 10px;
+  width: 70%;
+}
+.viser-progress > span {
+  position: absolute; top: 0; bottom: 0;
+  width: 35%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.85), transparent);
+  animation: viser-bar 1.35s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+@keyframes viser-bar {
+  0%   { left: -45%; }
+  100% { left: 110%; }
+}
+.viser-stage {
+  font-size: 10.5px; letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.55);
+  text-transform: lowercase;
+  min-height: 1em;
+}
+
+/* stats */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--rule);
+  margin: 40px 0 32px;
+}
+.stat {
+  padding: 24px 20px;
+  border-right: 1px solid var(--rule);
+}
+.stat:last-child { border-right: none; }
+.stat-value {
+  font-family: 'Fraunces', serif;
+  font-size: 44px; font-weight: 400; line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.stat-value sub {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px; color: var(--ink-3);
+  margin-left: 4px; font-weight: 400; vertical-align: baseline;
+}
+.stat-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; color: var(--ink-3);
+  text-transform: uppercase; letter-spacing: 0.08em;
+  margin-top: 10px;
+}
+.stat-spark { margin-top: 10px; height: 20px; width: 100%; }
+
+/* filters */
+.filter-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1px; background: var(--rule);
+  border: 1px solid var(--rule);
+}
+.filter {
+  background: var(--paper); padding: 12px 14px;
+  display: flex; flex-direction: column; gap: 6px;
+  min-height: 66px;
+}
+.filter label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; letter-spacing: 0.08em;
+  color: var(--ink-3); text-transform: uppercase;
+}
+.filter select, .filter input {
+  border: none; background: transparent;
+  font-family: 'Inter', sans-serif; font-size: 13px;
+  color: var(--ink); outline: none; padding: 0;
+  font-weight: 500;
+  width: 100%;
+}
+.filter select { appearance: none; cursor: pointer;
+  background-image: linear-gradient(45deg, transparent 50%, var(--ink-3) 50%), linear-gradient(135deg, var(--ink-3) 50%, transparent 50%);
+  background-position: calc(100% - 8px) 8px, calc(100% - 4px) 8px;
+  background-size: 4px 4px; background-repeat: no-repeat;
+  padding-right: 18px;
+}
+
+.filter-bar-tail {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 0; margin-top: 16px;
+  border-top: 1px solid var(--rule);
+}
+.chip {
+  display: inline-flex; gap: 6px; align-items: center;
+  padding: 4px 9px; background: var(--chip);
+  border-radius: 99px; font-size: 11px; font-family: 'IBM Plex Mono', monospace;
+  color: var(--ink-2);
+}
+.filter-tail-right { display: flex; gap: 12px; align-items: center; color: var(--ink-3); font-family: 'IBM Plex Mono', monospace; font-size: 12px; }
+
+/* browse: combined toolbar */
+.browse-toolbar {
+  display: flex; gap: 14px; align-items: stretch;
+  margin-top: 22px; padding-bottom: 12px;
+  border-bottom: 1px solid var(--rule);
+}
+.browse-search { flex: 1; }
+.browse-search input {
+  width: 100%; padding: 10px 14px;
+  font-family: 'Inter', sans-serif; font-size: 14px;
+  border: 1px solid var(--rule); background: var(--paper);
+  color: var(--ink); outline: none;
+}
+.browse-search input:focus { border-color: var(--ink-2); }
+.browse-toolbar-right { display: flex; gap: 10px; align-items: stretch; }
+.browse-select {
+  appearance: none; cursor: pointer;
+  padding: 8px 28px 8px 12px;
+  font-family: 'IBM Plex Mono', monospace; font-size: 12px;
+  border: 1px solid var(--rule); background: var(--paper);
+  color: var(--ink);
+  background-image: linear-gradient(45deg, transparent 50%, var(--ink-3) 50%), linear-gradient(135deg, var(--ink-3) 50%, transparent 50%);
+  background-position: calc(100% - 14px) 50%, calc(100% - 10px) 50%;
+  background-size: 4px 4px; background-repeat: no-repeat;
+}
+.view-toggle {
+  display: inline-flex; border: 1px solid var(--rule); overflow: hidden;
+}
+.vt-btn {
+  display: inline-flex; gap: 6px; align-items: center;
+  padding: 6px 12px;
+  background: var(--paper); border: 0; cursor: pointer;
+  color: var(--ink-3);
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+}
+.vt-btn + .vt-btn { border-left: 1px solid var(--rule); }
+.vt-btn[aria-pressed="true"] {
+  background: var(--ink); color: var(--paper);
+}
+.vt-icon { font-size: 13px; line-height: 1; }
+
+.browse-filters {
+  display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.chip-toggle {
+  display: inline-flex; gap: 6px; align-items: center;
+  padding: 5px 11px; cursor: pointer;
+  border: 1px solid var(--rule);
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+  color: var(--ink-2);
+  user-select: none;
+}
+.chip-toggle input { appearance: none; width: 9px; height: 9px; border: 1px solid var(--ink-3); margin: 0; cursor: pointer; }
+.chip-toggle input:checked { background: var(--accent); border-color: var(--accent); }
+.chip-toggle:has(input:checked) { color: var(--ink); border-color: var(--ink-2); }
+.browse-count { margin-left: auto; color: var(--ink-3); font-family: 'IBM Plex Mono', monospace; font-size: 11px; }
+
+.browse-content { margin-top: 18px; }
+.browse-content[data-view="grid"] #browse-table-wrap { display: none; }
+.browse-content[data-view="list"] #showcase { display: none; }
+
+/* table */
+.table-wrap { position: relative; }
+table.episodes {
+  width: 100%; border-collapse: collapse;
+  font-family: 'Inter', sans-serif; font-size: 13px;
+}
+.episodes thead th {
+  text-align: left; font-weight: 500; color: var(--ink-3);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--ink);
+  background: var(--paper);
+}
+.episodes tbody td {
+  padding: 14px 14px;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: middle;
+}
+.episodes tbody tr { cursor: pointer; transition: background 0.1s; }
+.episodes tbody tr:hover { background: var(--paper-2); }
+.episodes tbody tr.active { background: var(--chip); }
+.episodes tbody tr.active td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+.task-cell { display: flex; align-items: center; gap: 12px; }
+.task-cell .task-thumb {
+  flex: none;
+  width: 56px; height: 36px;
+  object-fit: cover;
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+}
+.task-cell .task-text { display: flex; flex-direction: column; min-width: 0; }
+.task-cell .task-name { font-weight: 500; color: var(--ink); }
+.task-cell .task-scene { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--ink-3); }
+.mono-cell { font-family: 'IBM Plex Mono', monospace; color: var(--ink-2); font-size: 12px; }
+.num-cell { font-family: 'IBM Plex Mono', monospace; font-variant-numeric: tabular-nums; color: var(--ink); text-align: right; }
+.badge {
+  display: inline-flex; gap: 5px; align-items: center;
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+  color: var(--ink-2);
+}
+.badge::before {
+  content: ''; width: 7px; height: 7px; border-radius: 1px;
+  background: var(--badge-color, var(--ink-3));
+}
+
+/* viewer */
+.viewer-grid {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 18px;
+}
+.viewer-stage {
+  position: relative;
+  aspect-ratio: 16/11;
+  background: oklch(0.09 0.008 260);
+  border: 1px solid var(--rule);
+  border-radius: 18px;
+  overflow: hidden;
+  color: oklch(0.96 0.006 80);
+}
+#viewer-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: grab; }
+#viewer-canvas:active { cursor: grabbing; }
+.viewer-chrome-tl { position: absolute; top: 14px; left: 14px; display: flex; flex-direction: column; gap: 8px; z-index: 3; }
+.viewer-chrome-tr { position: absolute; top: 14px; right: 14px; display: flex; gap: 4px; z-index: 3; }
+.viewer-chip-row { display: flex; gap: 6px; }
+.viewer-chip {
+  padding: 4px 8px; background: rgba(0,0,0,0.45); backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.08); border-radius: 6px;
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.78);
+}
+.viewer-hint {
+  padding: 10px 14px; background: rgba(0,0,0,0.62); backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.14); border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  color: white; max-width: 260px;
+}
+.viewer-hint-title {
+  font-family: 'Inter', sans-serif; font-weight: 600; font-size: 15px;
+  letter-spacing: -0.005em; line-height: 1.2; color: white;
+}
+.viewer-hint-sub {
+  font-family: 'Inter', sans-serif; font-weight: 400; font-size: 12px;
+  color: rgba(255,255,255,0.72); margin-top: 3px;
+}
+.viewer-btn {
+  width: 26px; height: 26px; background: rgba(0,0,0,0.45); backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.08); border-radius: 6px;
+  color: rgba(255,255,255,0.78); cursor: pointer; font-family: 'IBM Plex Mono', monospace; font-size: 12px;
+}
+.viewer-btn:hover { color: white; border-color: rgba(255,255,255,0.25); }
+.viewer-layers {
+  position: absolute; right: 14px; top: 52px; width: 200px;
+  background: rgba(10,14,22,0.6); backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.08); border-radius: 10px;
+  padding: 10px 12px; z-index: 3;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.viewer-layers .panel-label { margin-bottom: 4px; color: rgba(255,255,255,0.4); font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; }
+.layer {
+  display: flex; align-items: center; gap: 8px;
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+  color: rgba(255,255,255,0.82); cursor: pointer;
+  padding: 2px 0;
+}
+.layer input { position: absolute; opacity: 0; pointer-events: none; }
+.layer .sw {
+  width: 20px; height: 12px; background: rgba(255,255,255,0.1);
+  border-radius: 99px; position: relative; flex-shrink: 0;
+  transition: background 0.15s;
+}
+.layer .sw::after {
+  content: ''; position: absolute; top: 1px; left: 1px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: rgba(255,255,255,0.5); transition: transform 0.15s, background 0.15s;
+}
+.layer input:checked ~ .sw { background: var(--accent); }
+.layer input:checked ~ .sw::after { transform: translateX(8px); background: white; }
+.layer .num { margin-left: auto; color: rgba(255,255,255,0.4); font-size: 10px; }
+
+.viewer-gizmo {
+  position: absolute; left: 16px; bottom: 70px;
+  display: flex; gap: 6px; font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; color: rgba(255,255,255,0.7);
+  background: rgba(0,0,0,0.45); padding: 4px 8px; border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.viewer-timeline {
+  position: absolute; left: 14px; right: 14px; bottom: 14px;
+  display: flex; align-items: center; gap: 10px;
+  background: rgba(10,14,22,0.65); backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.08); border-radius: 10px;
+  padding: 8px 12px;
+}
+.viewer-play {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--accent); color: white; border: none;
+  cursor: pointer; font-size: 10px; display: flex; align-items: center; justify-content: center;
+}
+.v-time { font-size: 11px; color: rgba(255,255,255,0.75); min-width: 38px; font-family: 'IBM Plex Mono', monospace; }
+.v-track { flex: 1; position: relative; height: 16px; display: flex; align-items: center; cursor: pointer; }
+.v-track::before {
+  content: ''; position: absolute; left: 0; right: 0; height: 3px; top: 50%; transform: translateY(-50%);
+  background: rgba(255,255,255,0.1); border-radius: 99px;
+}
+.v-played { position: absolute; top: 50%; transform: translateY(-50%); height: 3px; background: var(--accent); border-radius: 99px; pointer-events: none; }
+.v-handle { position: absolute; top: 50%; transform: translate(-50%,-50%); width: 10px; height: 10px; border-radius: 50%; background: white; box-shadow: 0 0 0 3px rgba(255,255,255,0.15); pointer-events: none; }
+
+.viewer-side {
+  display: flex; flex-direction: column; gap: 14px;
+  /* Geometry lock: 3fr stage @16:11 has the same height as 1fr side @16:33,
+     so the side panel matches the viser stage exactly regardless of viewport. */
+  aspect-ratio: 16 / 33;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Wide retarget strip below the viser stage (5:1 aspect). One per clip;
+   per-clip mp4 swap happens in app.js once retarget videos are available. */
+.viewer-retargets {
+  margin-top: 22px;
+  width: 100%;
+  /* Height derived from cell aspect-ratio (4:3 per cell) plus row padding.
+     min-height kicks in when row is hidden (idle / empty fallback states)
+     so the absolutely-positioned overlay still has something to fill. */
+  min-height: 220px;
+  background: var(--paper-2);
+  border: 1px solid var(--rule-2);
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+}
+/* 4-column grid of robot replay videos. Each cell is 4:3, the video inside
+   is 1:1 centered horizontally with letterbox on left/right. Per-robot
+   transform (scale + object-position) zooms in on the robot since the
+   source render frames each robot at a different size/position.
+   `[hidden]` override required because `display: grid` beats UA stylesheet. */
+.retarget-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+.retarget-row[hidden] { display: none; }
+.retarget-cell {
+  aspect-ratio: 4 / 3;          /* each frame is 4:3 */
+  background: #fff;             /* match robot_sim white bg so letterbox blends */
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  min-width: 0;
+}
+.retarget-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: #fff;
+  padding: 4px 8px 3px;
+  background: rgba(0, 0, 0, 0.55);
+  position: absolute; top: 0; left: 0; right: 0;
+  z-index: 1;
+}
+/* Video is 1:1 (height = cell height, width = cell height, centered horizontally).
+   Letterbox fills the remaining ~12.5% on each side. transform: scale() applies
+   the per-robot zoom (defaults below tuned to the -9A2VyaIkX4_105.4_109.4 clip
+   middle frame; should generalize across clips since each robot's framing is
+   consistent across clips). object-position picks which part of the 4:3 source
+   stays in the 1:1 crop. */
+.retarget-cell video {
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 50%;
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  transform: translateX(-50%) scale(var(--robot-zoom, 1));
+  transform-origin: center center;
+  object-fit: cover;
+  object-position: var(--robot-pos, 50% 50%);
+  background: #fff;
+  display: block;
+}
+/* Per-robot tuning. Values reflect where the robot sits in its source frame
+   (1440×1080 4:3) and how much to zoom for parity across the row. */
+.retarget-cell[data-robot="franka"]    { --robot-zoom: 1.45; --robot-pos: 30% 65%; }
+.retarget-cell[data-robot="g1"]        { --robot-zoom: 1.15; --robot-pos: 50% 55%; }
+.retarget-cell[data-robot="robonaut2"] { --robot-zoom: 1.20; --robot-pos: 55% 55%; }
+.retarget-cell[data-robot="xlerobot"]  { --robot-zoom: 1.00; --robot-pos: 70% 50%; }
+/* Idle (no clip picked) + Empty (clip has no retarget) overlays.
+   Cover the whole 160px box, mutually exclusive with .retarget-row.
+   `[hidden]` override needed for the same reason as .retarget-row. */
+.retarget-idle, .retarget-empty {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 10px;
+  color: var(--ink-3);
+  background: var(--paper-2);
+}
+.retarget-idle[hidden], .retarget-empty[hidden] { display: none; }
+.retarget-idle svg, .retarget-empty svg {
+  width: 36px; height: 36px;
+  fill: currentColor; opacity: 0.55;
+}
+.retarget-idle-label, .retarget-empty-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+  padding: 0 16px; text-align: center;
+}
+.side-block {
+  border: 1px solid var(--rule); border-radius: 14px; padding: 16px 18px;
+  background: var(--paper);
+}
+.side-block-list {
+  flex: 1; min-height: 0;
+  display: flex; flex-direction: column;
+  padding: 16px 18px 12px;
+}
+.side-cliplist {
+  flex: 1; min-height: 0;
+  overflow-y: auto;
+  margin: 4px -6px 0;
+  padding: 2px 4px;
+}
+.side-clip {
+  display: flex; gap: 10px; align-items: center;
+  padding: 6px 6px; cursor: pointer;
+  border-bottom: 1px solid var(--rule);
+  transition: background 0.1s;
+}
+.side-clip:last-child { border-bottom: 0; }
+.side-clip:hover { background: var(--paper-2); }
+.side-clip.active {
+  background: var(--chip);
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+.side-clip-thumb {
+  width: 56px; height: 32px; object-fit: cover; border-radius: 3px;
+  flex-shrink: 0;
+  background: var(--paper-2);
+}
+.side-clip-text { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+.side-clip-title {
+  font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500; color: var(--ink);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  line-height: 1.3;
+}
+.side-clip-id {
+  font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--ink-3);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  margin-top: 1px;
+}
+.panel-label-light {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--ink-3); margin-bottom: 8px;
+}
+.loaded-card .obj-row {
+  display: grid; grid-template-columns: 14px 1fr auto auto;
+  gap: 10px; align-items: center;
+  padding: 6px 0;
+  border-top: 1px solid var(--rule);
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+}
+.loaded-card .obj-row:first-of-type { border-top: none; padding-top: 10px; }
+.obj-swatch { width: 10px; height: 10px; border-radius: 50%; }
+.obj-prompt { color: var(--ink); font-family: 'Inter', sans-serif; font-weight: 500; font-size: 12px; }
+.obj-stat { color: var(--ink-3); }
+.obj-tag {
+  font-size: 9px; padding: 2px 5px; border-radius: 3px;
+  background: var(--chip); color: var(--ink-2); letter-spacing: 0.04em;
+}
+
+.viewer-video-wrap {
+  position: relative; aspect-ratio: 16/10;
+  margin-top: 8px;
+  border-radius: 10px; overflow: hidden;
+  background: oklch(0.10 0.01 260);
+  border: 1px solid var(--rule);
+}
+.viewer-video-wrap video {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
+
+.ep-list { display: flex; flex-direction: column; gap: 2px; margin-top: 6px; max-height: 300px; overflow: auto; }
+.ep-item {
+  display: grid; grid-template-columns: 24px 1fr auto; gap: 10px; align-items: center;
+  padding: 8px; border-radius: 8px; cursor: pointer; font-size: 12px;
+}
+.ep-item:hover { background: var(--paper-2); }
+.ep-item.active { background: var(--chip); }
+.ep-item.active .ep-dot { background: var(--accent); box-shadow: 0 0 6px var(--accent); }
+.ep-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ink-3); margin-left: 6px; }
+.ep-name { font-weight: 500; color: var(--ink); }
+.ep-meta { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--ink-3); }
+
+.mini-grid { margin: 6px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 14px; }
+.mini-grid dt { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.06em; }
+.mini-grid dd { margin: 2px 0 0; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--ink); }
+
+@media (max-width: 1400px) {
+  .showcase { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 1100px) {
+  .viewer-grid { grid-template-columns: 1fr; }
+  .viewer-layers { width: 170px; }
+  .hero { grid-template-columns: 1fr; gap: 28px; padding-top: 36px; }
+  .showcase { grid-template-columns: repeat(2, 1fr); }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .filter-grid { grid-template-columns: repeat(2, 1fr); }
+  .detail { grid-template-columns: 1fr; }
+}
+
+/* inspect / detail */
+.detail {
+  display: grid; grid-template-columns: minmax(0,1.3fr) minmax(0,1fr);
+  gap: 36px;
+  margin-top: 32px;
+}
+.detail-video {
+  position: relative; aspect-ratio: 16/10;
+  background: var(--paper-2); border: 1px solid var(--rule);
+  overflow: hidden; border-radius: 18px;
+}
+.detail-video video {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover;
+}
+.detail-subs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: auto;
+  gap: 10px;
+}
+.sub-frame {
+  aspect-ratio: 16/10; background: var(--paper-2); border: 1px solid var(--rule);
+  position: relative; border-radius: 12px; overflow: hidden;
+}
+.sub-frame video, .sub-frame img, .sub-frame iframe, .sub-frame canvas {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: oklch(0.10 0.01 260);
+  border: 0;
+}
+/* skeleton overlay sits on top of the depth video; pixel-aligned 2D draw */
+.overlay-skeleton {
+  pointer-events: none;
+  background: transparent !important;
+  z-index: 2;
+}
+.sub-label {
+  position: absolute; bottom: 6px; left: 8px;
+  font-family: 'IBM Plex Mono', monospace; font-size: 10px;
+  color: white; background: rgba(0,0,0,0.5); padding: 2px 6px; border-radius: 3px;
+}
+
+/* signal panel */
+.signal-panel {
+  margin-top: 12px;
+  border: 1px solid var(--rule); border-radius: 12px; padding: 14px 16px;
+  background: var(--paper);
+}
+.signal-row {
+  display: grid; grid-template-columns: 90px 1fr 56px;
+  align-items: center;
+  gap: 12px;
+  font-family: 'IBM Plex Mono', monospace; font-size: 10px;
+  color: var(--ink-3);
+  height: 22px;
+}
+.signal-row .signal-label { text-transform: uppercase; letter-spacing: 0.06em; }
+.signal-row .signal-value { text-align: right; color: var(--ink); font-variant-numeric: tabular-nums; }
+.signal-row svg { width: 100%; height: 18px; display: block; }
+.signal-playhead {
+  stroke: var(--accent); stroke-width: 1.5;
+}
+
+/* per-object state timeline */
+.state-legend {
+  display: inline-flex; gap: 10px; margin-left: 8px;
+  font-size: 9.5px; color: var(--ink-3); align-items: center;
+}
+.state-chip {
+  display: inline-block; width: 10px; height: 10px;
+  border-radius: 2px; vertical-align: middle;
+  margin-right: 3px;
+}
+.state-static       { background: oklch(0.78 0.01 240); }   /* light gray */
+.state-grasped-l    { background: oklch(0.70 0.16 50); }    /* warm orange = left */
+.state-grasped-r    { background: oklch(0.60 0.20 20); }    /* red-orange = right */
+.state-grasped-both { background: oklch(0.42 0.20 15); }    /* deep red = both */
+.state-moving       { background: oklch(0.55 0.10 240); }   /* cool blue */
+.state-grasped      { background: oklch(0.58 0.18 30); }    /* legacy single-grasp */
+
+.state-row {
+  display: grid; grid-template-columns: 100px 1fr 56px;
+  align-items: center;
+  gap: 12px;
+  font-family: 'IBM Plex Mono', monospace; font-size: 10px;
+  color: var(--ink-3);
+  height: 22px;
+}
+.state-row .state-label {
+  text-transform: uppercase; letter-spacing: 0.04em;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.state-row .state-value { text-align: right; color: var(--ink); }
+.state-row svg { width: 100%; height: 18px; display: block; }
+
+/* detail meta */
+.detail-meta h3 {
+  font-family: 'Fraunces', serif; font-size: 28px;
+  font-weight: 400; margin: 0 0 4px; letter-spacing: -0.01em;
+}
+.detail-id {
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+  color: var(--ink-3); margin-bottom: 4px;
+}
+.detail-source-title {
+  font-family: 'Fraunces', serif; font-style: italic;
+  font-size: 13px; color: var(--ink-3);
+  margin-bottom: 20px; max-width: 56ch;
+}
+.detail-source-title:empty { display: none; }
+.detail-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--rule);
+  border-left: 1px solid var(--rule);
+  margin-bottom: 22px;
+}
+.detail-grid > div {
+  padding: 12px 14px;
+  border-right: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.detail-grid dt {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; letter-spacing: 0.08em;
+  color: var(--ink-3); text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.detail-grid dd {
+  margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 13px;
+  color: var(--ink); font-weight: 500;
+}
+.detail-desc {
+  font-size: 14px; color: var(--ink-2); padding: 14px 0;
+  border-top: 1px solid var(--rule);
+}
+.detail-desc-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; letter-spacing: 0.08em;
+  color: var(--ink-3); text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.object-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.object-pill {
+  padding: 4px 9px; border: 1px solid var(--rule-2);
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+  color: var(--ink-2);
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.object-pill::before {
+  content: ''; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--obj-color, var(--ink-3));
+}
+
+/* footer */
+footer {
+  max-width: 1480px; margin: 0 auto;
+  padding: 40px 28px; display: flex; justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+  color: var(--ink-3);
+}
+
+/* loading state */
+.loading {
+  color: var(--ink-3);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+}
+
+/* team */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px 28px;
+  margin-top: 8px;
+}
+.team-author {
+  padding: 16px 18px;
+  border: 1px solid var(--rule);
+  background: var(--paper-2);
+}
+.team-name {
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+}
+.team-affil {
+  margin-top: 4px;
+  font-size: 11px;
+  color: var(--ink-3);
+}
+
+/* ────────────────────────────────────────────────────────────────────── */
+/* 005 / Statistics                                                        */
+/* ────────────────────────────────────────────────────────────────────── */
+.stats-card {
+  margin: 0 0 22px;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.stats-card-wide { width: 100%; }
+.stats-card > img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  background: var(--paper-2);
+}
+.stats-card figcaption {
+  padding: 14px 22px 18px;
+  border-top: 1px solid var(--rule);
+  background: var(--paper);
+}
+.stats-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ink-3); display: block; margin-bottom: 6px;
+}
+.stats-card h3 {
+  font-family: 'Fraunces', serif; font-size: 18px;
+  margin: 0; color: var(--ink); letter-spacing: -0.005em;
+}
+.stats-card p { font-size: 13px; color: var(--ink-2); line-height: 1.5; margin: 6px 0 0; }
+
+/* Row 3: 33% / 67% split */
+.stats-row-split {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 22px;
+  margin-top: 0;
+  align-items: stretch;
+}
+@media (max-width: 900px) { .stats-row-split { grid-template-columns: 1fr; } }
+.stats-card-split { margin-bottom: 0; }
+.stats-card-split > img {
+  /* the n-grams chart is wide (~4:1); contain it so all 3 mini-charts stay readable */
+  max-height: 480px;
+  background: var(--paper);
+}
+.stats-side-note {
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  border-radius: 14px;
+  padding: 22px 26px;
+  display: flex; flex-direction: column; gap: 10px;
+  color: var(--ink-2); font-size: 14px; line-height: 1.55;
+}
+.stats-side-note h3 {
+  font-family: 'Fraunces', serif; font-size: 22px;
+  margin: 0; color: var(--ink); letter-spacing: -0.005em;
+}
+.stats-side-note p { margin: 0; }
+.stats-side-note a { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 2px; }
+.stats-citation-lead {
+  margin-top: 8px !important;
+  font-size: 12px !important;
+  color: var(--ink-3) !important;
+  font-family: 'IBM Plex Mono', monospace;
+  letter-spacing: 0.04em;
+}
+.stats-bibtex {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: normal;
+  overflow-x: auto;
+}
+
+/* ────────────────────────────────────────────────────────────────────── */
+/* 006 / Roadmap                                                           */
+/* ────────────────────────────────────────────────────────────────────── */
+.roadmap-list {
+  list-style: none; padding: 0 0 0 38px; margin: 8px 0 0;
+  position: relative;
+}
+.roadmap-list::before {
+  content: ''; position: absolute;
+  left: 11px; top: 8px; bottom: 8px; width: 1px;
+  background: linear-gradient(to bottom, transparent, var(--rule-2) 12%, var(--rule-2) 88%, transparent);
+}
+.roadmap-item {
+  position: relative;
+  padding-bottom: 40px;
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 24px;
+  align-items: baseline;
+}
+.roadmap-item:last-child { padding-bottom: 0; }
+.roadmap-dot {
+  position: absolute;
+  left: -32px; top: 10px;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px var(--paper);
+  background: var(--ink-3);
+}
+.roadmap-item[data-status="shipped"] .roadmap-dot { background: var(--ok); }
+.roadmap-item[data-status="active"]  .roadmap-dot { background: var(--accent); }
+.roadmap-quarter {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-3);
+}
+.roadmap-body h3 {
+  font-family: 'Fraunces', serif; font-size: 20px;
+  margin: 0 0 6px; color: var(--ink); letter-spacing: -0.005em;
+}
+.roadmap-status {
+  font-family: 'IBM Plex Mono', monospace; font-size: 10px;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-3); margin-left: 6px;
+}
+.roadmap-item[data-status="shipped"] .roadmap-status { color: var(--ok); }
+.roadmap-item[data-status="active"]  .roadmap-status { color: var(--accent-ink); }
+.roadmap-body p {
+  font-size: 14px; color: var(--ink-2); line-height: 1.55;
+  margin: 0; max-width: 60ch;
+}
+/* Sub-bullets inside a single roadmap item (used for the consolidated
+   Shipped + Future entries). Marker is a CSS-drawn short horizontal line
+   so no em-dash character is needed. */
+.roadmap-sublist {
+  list-style: none; padding: 0; margin: 12px 0 0;
+  display: flex; flex-direction: column; gap: 10px;
+  max-width: 62ch;
+}
+.roadmap-sublist > li {
+  position: relative;
+  padding-left: 20px;
+  font-size: 14px;
+  color: var(--ink-2);
+  line-height: 1.55;
+}
+.roadmap-sublist > li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 10px;
+  width: 10px; height: 1px;
+  background: var(--ink-3);
+}
+.roadmap-sublist > li strong {
+  color: var(--ink); font-weight: 600;
+}
+.roadmap-artifacts {
+  list-style: none; padding: 0; margin: 14px 0 0;
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+.roadmap-artifacts li {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; letter-spacing: 0.04em;
+  padding: 3px 8px; border: 1px solid var(--rule-2); border-radius: 3px;
+  color: var(--ink-2);
+}
+
+/* ────────────────────────────────────────────────────────────────────── */
+/* 008 / Waitlist                                                          */
+/* ────────────────────────────────────────────────────────────────────── */
+.waitlist-grid {
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  gap: 36px;
+  margin-top: 8px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .waitlist-grid { grid-template-columns: 1fr; }
+}
+.waitlist-bullets {
+  list-style: none; padding: 0; margin: 0;
+  display: flex; flex-direction: column; gap: 18px;
+  font-size: 14px; color: var(--ink-2); line-height: 1.5;
+}
+.waitlist-bullets li {
+  display: flex; align-items: flex-start; gap: 12px;
+}
+.waitlist-bullets li::before {
+  content: ''; display: block;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent); flex-shrink: 0;
+  margin-top: 8px;
+}
+.waitlist-card {
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  border-radius: 14px;
+  padding: 24px 28px;
+  display: flex; flex-direction: column; gap: 18px;
+}
+.waitlist-card-head h3 {
+  font-family: 'Fraunces', serif; font-size: 22px;
+  margin: 0; color: var(--ink); letter-spacing: -0.005em;
+}
+.waitlist-card-head p {
+  font-size: 13px; color: var(--ink-3); margin: 4px 0 0;
+}
+.waitlist-cta {
+  justify-content: center;
+  padding: 14px 18px;
+  width: 100%;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* ===== css/project.css ===== */
+/* EgoInfinity project page (method + experiments).
+   Reuses css/styles.css tokens, themes, .section, .btn, .stats, .eyebrow,
+   .stats-bibtex, footer and topbar. This file adds only the page-specific
+   components: the paper header, media placeholders, pipeline stage cards,
+   the results table, callouts and prose. */
+
+/* ── Paper header ──────────────────────────────────────────────────────── */
+.paper-hero {
+  max-width: 1080px; margin: 0 auto;
+  padding: 60px 28px 46px;
+  border-bottom: 1px solid var(--rule);
+  text-align: center;
+}
+.paper-hero .eyebrow { justify-content: center; }
+.paper-hero h1 {
+  font-size: clamp(28px, 4vw, 50px);
+  line-height: 1.1;
+  margin: 14px auto 24px;
+  max-width: 22ch;
+}
+.paper-authors {
+  font-size: 16px; color: var(--ink);
+  line-height: 1.8; max-width: 60ch; margin: 0 auto;
+}
+.paper-authors a { color: var(--ink); text-decoration: none; }
+.paper-authors a:hover { color: var(--accent-ink); }
+.paper-authors sup { color: var(--accent-ink); font-size: 0.7em; }
+.paper-affils {
+  margin-top: 12px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px; color: var(--ink-3);
+  display: flex; gap: 18px; justify-content: center; flex-wrap: wrap;
+}
+.paper-affils sup { color: var(--accent-ink); }
+.paper-links {
+  display: flex; flex-wrap: wrap; gap: 10px;
+  justify-content: center; margin-top: 28px;
+}
+
+/* ── Prose ─────────────────────────────────────────────────────────────── */
+.prose { max-width: 74ch; }
+.prose p { font-size: 15px; color: var(--ink-2); line-height: 1.65; margin: 0 0 15px; }
+.prose p:last-child { margin-bottom: 0; }
+.prose strong { color: var(--ink); font-weight: 600; }
+.prose .mono { color: var(--ink); }
+.lead {
+  font-family: 'Fraunces', serif; font-style: italic;
+  font-size: clamp(18px, 2vw, 22px); line-height: 1.4;
+  color: var(--accent-ink); max-width: 60ch; margin: 0 0 8px;
+}
+
+/* ── Media placeholders (swap for real images / videos later) ──────────── */
+.media-ph {
+  position: relative;
+  background: var(--paper-2);
+  border: 1px dashed var(--rule-2);
+  border-radius: 14px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 10px; padding: 24px; text-align: center;
+  color: var(--ink-3);
+  aspect-ratio: var(--ph-ar, 16 / 9);
+  overflow: hidden;
+}
+.media-ph svg { width: 38px; height: 38px; fill: currentColor; opacity: 0.45; }
+.media-ph .ph-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--ink-2);
+}
+.media-ph .ph-file {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; color: var(--ink-3); opacity: 0.8;
+}
+figure.media { margin: 0; }
+figure.media figcaption {
+  margin-top: 12px;
+  font-size: 13px; color: var(--ink-2); line-height: 1.5;
+  max-width: 90ch;
+}
+figure.media figcaption b { color: var(--ink); font-weight: 600; }
+
+/* ── Real media swapped in from media/ ─────────────────────────────────── */
+.media-fig {
+  display: block; width: 100%; height: auto;
+  background: var(--paper-2);
+  border: 1px solid var(--rule-2);
+  border-radius: 14px;
+}
+.media-cell {
+  position: relative; overflow: hidden;
+  border-radius: 14px; border: 1px solid var(--rule-2);
+}
+.media-cell video {
+  display: block; width: 100%;
+  aspect-ratio: 16 / 9; object-fit: cover;
+  background: var(--paper-2);
+}
+
+.media-grid {
+  display: grid; gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+}
+.media-grid .ph-cap {
+  position: absolute; top: 0; left: 0; right: 0;
+  padding: 6px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ink-2);
+  background: color-mix(in oklch, var(--paper) 70%, transparent);
+  border-bottom: 1px dashed var(--rule-2);
+}
+
+/* ── Pipeline stage cards ──────────────────────────────────────────────── */
+.pipeline-group { margin-top: 26px; }
+.pipeline-group > .pg-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--accent-ink);
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 12px;
+}
+.pipeline-group > .pg-title::before {
+  content: ''; width: 18px; height: 1px; background: var(--accent);
+}
+.stage-grid {
+  display: grid; gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(225px, 1fr));
+}
+.stage-card {
+  border: 1px solid var(--rule); border-radius: 12px;
+  padding: 15px 17px; background: var(--paper);
+  display: flex; flex-direction: column; gap: 5px;
+}
+.stage-card .sc-model {
+  font-family: 'Fraunces', serif; font-size: 18px;
+  color: var(--ink); letter-spacing: -0.005em;
+}
+.stage-card .sc-role { font-size: 13px; color: var(--ink-2); line-height: 1.45; }
+.stage-card .sc-tag {
+  margin-top: 2px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* the metric 4D HOI representation chips */
+.io-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.io-chip {
+  padding: 5px 11px; border: 1px solid var(--rule-2); border-radius: 4px;
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--ink-2);
+}
+.io-chip b { color: var(--ink); font-weight: 600; }
+
+/* ── Callout box ───────────────────────────────────────────────────────── */
+.callout {
+  border: 1px solid var(--rule-2);
+  border-left: 3px solid var(--accent);
+  border-radius: 8px; background: var(--paper-2);
+  padding: 18px 22px; margin: 26px 0 0;
+}
+.callout h4 {
+  font-family: 'Fraunces', serif; font-size: 18px; font-weight: 400;
+  margin: 0 0 6px; color: var(--ink); letter-spacing: -0.005em;
+}
+.callout p { font-size: 14px; color: var(--ink-2); line-height: 1.6; margin: 0; max-width: 82ch; }
+
+/* ── Results table (paper style) ───────────────────────────────────────── */
+.paper-table-wrap {
+  border: 1px solid var(--rule); border-radius: 12px;
+  overflow-x: auto; background: var(--paper);
+}
+table.paper-table {
+  width: 100%; border-collapse: collapse;
+  font-family: 'IBM Plex Mono', monospace; font-size: 12.5px;
+}
+.paper-table thead th {
+  text-align: right; white-space: nowrap;
+  padding: 13px 18px;
+  border-bottom: 1px solid var(--ink);
+  color: var(--ink-3); font-weight: 500;
+  font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase;
+}
+.paper-table thead th:first-child { text-align: left; }
+.paper-table tbody td {
+  padding: 13px 18px; text-align: right;
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink); font-variant-numeric: tabular-nums;
+}
+.paper-table tbody td:first-child {
+  text-align: left; font-weight: 500;
+  font-family: 'Inter', sans-serif;
+}
+.paper-table tbody tr:last-child td { border-bottom: 0; }
+.paper-table tbody tr:hover { background: var(--paper-2); }
+.table-note {
+  margin-top: 12px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; color: var(--ink-3); line-height: 1.5; max-width: 90ch;
+}
+
+/* ── Two-column section body ───────────────────────────────────────────── */
+.split {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 36px; align-items: start;
+}
+@media (max-width: 900px) { .split { grid-template-columns: 1fr; gap: 24px; } }
+
+/* limitations list */
+.lim-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; max-width: 80ch; }
+.lim-list li { position: relative; padding-left: 22px; font-size: 14px; color: var(--ink-2); line-height: 1.55; }
+.lim-list li::before { content: ''; position: absolute; left: 0; top: 9px; width: 11px; height: 1px; background: var(--ink-3); }
+.lim-list li strong { color: var(--ink); font-weight: 600; }
+
+/* ── Nerfies-style centered layout (skinned with the dark theme tokens) ─── */
+/* Narrow, centered single-column sections; centered section headers and
+   justified prose, the academic-project-page look, but using the same
+   paper/noir/ink variables, fonts and components as the HF Space. */
+.np-section {
+  max-width: 960px; margin: 0 auto;
+  padding: 58px 28px;
+  border-bottom: 1px solid var(--rule);
+}
+.np-head { text-align: center; margin-bottom: 34px; }
+.np-head .section-num { display: block; margin-bottom: 10px; letter-spacing: 0.18em; }
+.np-head .section-title { margin: 0; }
+/* narrow text column (Nerfies "is-four-fifths") */
+.np-narrow { max-width: 760px; margin-left: auto; margin-right: auto; }
+.np-section .prose { max-width: 760px; margin-left: auto; margin-right: auto; }
+.np-section .prose p { text-align: justify; }
+.np-lead { text-align: center; max-width: 720px; margin: 0 auto 24px; }
+/* center subsection headings within experiments etc. */
+.np-subhead {
+  font-family: 'Fraunces', serif; font-weight: 400;
+  font-size: 22px; letter-spacing: -0.005em;
+  text-align: center; color: var(--ink);
+  margin: 44px 0 16px;
+}
+.np-subhead:first-of-type { margin-top: 0; }
+figure.media { margin-left: auto; margin-right: auto; }
+/* rounded publication-link pills (the Nerfies signature button row) */
+.paper-links { gap: 12px; }
+.paper-links .btn { border-radius: 999px; padding: 9px 18px; }
+/* Nerfies attribution credit */
+.np-credit {
+  max-width: 960px; margin: 0 auto;
+  text-align: center; padding: 26px 28px 40px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; color: var(--ink-3); line-height: 1.6;
+}
+.np-credit a { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 2px; }
+
+</style>
+</head>
+<body data-theme="noir">
+
+<header class="topbar">
+  <a class="brand" href="https://huggingface.co/spaces/Rice-RobotPI-Lab/EgoInfinity" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+    <div class="brand-mark"></div>
+    <span>EGOINFINITY</span>
+  </a>
+  <div class="topbar-right">
+    <a href="#pipeline">Pipeline</a>
+    <a href="#retargeting">Retargeting</a>
+    <a href="#experiments">Experiments</a>
+    <a href="#bibtex">BibTeX</a>
+    <a href="https://huggingface.co/spaces/Rice-RobotPI-Lab/EgoInfinity" target="_blank" rel="noopener">Interactive demo ↗</a>
+    <a href="https://github.com/Rice-RobotPI-Lab/EgoInfinity" target="_blank" rel="noopener">GitHub ↗</a>
+    <button class="btn ghost" id="theme-btn" style="padding: 6px 10px; font-size: 11px;">Theme</button>
+  </div>
+</header>
+
+<!-- ───────────────────────────── PAPER HEADER ───────────────────────────── -->
+<section class="paper-hero">
+  <div class="eyebrow">Project page · Method &amp; experiments</div>
+  <h1>EgoInfinity: A Web-Scale 4D Hand-Object Interaction Data Engine for Any-View Robot Retargeting and Video-to-Action Robot Learning</h1>
+
+  <p class="paper-authors">
+    <a href="mailto:gw23@rice.edu">Gaotian Wang</a><sup>1</sup>,
+    <a href="mailto:kr43@rice.edu">Kejia Ren</a><sup>1</sup>,
+    <a href="mailto:andy@rai-inst.com">Andrew Morgan</a><sup>2</sup>,
+    <a href="mailto:yc203@rice.edu">Yiting Chen</a><sup>1</sup>,
+    <a href="mailto:hhq1@rice.edu">Howard H. Qian</a><sup>1</sup>,
+    <a href="mailto:pc45@rice.edu">Podshara Chanrungmaneekul</a><sup>1</sup>,
+    <a href="mailto:kaiyu.hang@rice.edu">Kaiyu Hang</a><sup>1</sup>
+  </p>
+  <div class="paper-affils">
+    <span><sup>1</sup> Rice University</span>
+    <span><sup>2</sup> Robotics and AI Institute</span>
+  </div>
+
+  <div class="paper-links">
+    <a class="btn" href="https://arxiv.org/abs/2606.17385" target="_blank" rel="noopener">Paper (arXiv) <span class="mono">↗</span></a>
+    <a class="btn ghost" href="https://github.com/Rice-RobotPI-Lab/EgoInfinity" target="_blank" rel="noopener">Code <span class="mono">↗</span></a>
+    <a class="btn ghost" href="https://huggingface.co/datasets/Rice-RobotPI-Lab/egoinfinity" target="_blank" rel="noopener">Dataset <span class="mono">↗</span></a>
+    <a class="btn ghost" href="https://huggingface.co/spaces/Rice-RobotPI-Lab/EgoInfinity" target="_blank" rel="noopener">Interactive demo <span class="mono">↗</span></a>
+    <a class="btn ghost" href="#bibtex">BibTeX</a>
+  </div>
+</section>
+
+<!-- ───────────────────────────── TEASER ────────────────────────────────── -->
+<section class="np-section">
+  <figure class="media">
+    <video class="media-fig" src="media/teaser.mp4" autoplay muted loop playsinline></video>
+    <figcaption style="text-align:center;"><b>EgoInfinity</b> turns filtered in-the-wild Action100M clips and their text descriptions into metric hand trajectories and object geometry and pose, then retargets the recovered motion onto diverse robots and real hardware.</figcaption>
+  </figure>
+</section>
+
+<!-- ───────────────────────────── ABSTRACT ──────────────────────────────── -->
+<section class="np-section" id="abstract">
+  <div class="np-head">
+    <div class="section-num">01 / Overview</div>
+    <h2 class="section-title">Abstract</h2>
+  </div>
+  <div class="prose">
+    <p>Internet videos are the largest reservoir of embodied human manipulation knowledge, yet converting arbitrary RGB footage into actionable robot training data remains a major bottleneck. Lab- and factory-collected datasets are narrow in scale and diversity, limiting open-world robot learning.</p>
+    <p>Instead of releasing a static dataset, we introduce <strong>EgoInfinity</strong>, a universal 4D hand-object interaction data engine for web-scale data generation. It is a <strong>modular engine</strong> that integrates perception, segmentation, reconstruction, interaction-aware refinement, and retargeting to automate the video-to-action problem with no human-in-the-loop annotation, and it keeps improving as any one component is upgraded.</p>
+    <p>EgoInfinity lifts in-the-wild human manipulation videos into agent-agnostic, metric 4D representations: hand trajectories, 6-DoF object poses, and contact-relevant states. Rather than naively connecting standalone components, it combines <strong>cross-module metric calibration</strong> with <strong>interaction-aware refinement</strong> to reduce the drift and contact inconsistency common in pure visual reconstruction. A novel <strong>functional retargeter</strong> then compiles the recovered 3D hand motion into executable joint trajectories for diverse robot morphologies, enabling video-to-action transfer on any robot from arbitrary viewpoints and shot sizes, even when the human body is only partially visible. We validate EgoInfinity across perception fidelity, kinematic feasibility, contact consistency, cross-embodiment generalization, and real-robot skill acquisition (grasping, cutting, wiping, and pouring).</p>
+  </div>
+
+  <div class="stats" style="max-width:760px;margin-left:auto;margin-right:auto;">
+    <div class="stat">
+      <div class="stat-value">14.6<sub>yr</sub></div>
+      <div class="stat-label">addressable corpus (≈127K hr)</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">0<sub>annot.</sub></div>
+      <div class="stat-label">no wearables / mocap / CAD / manual labels</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">4<sub>robots</sub></div>
+      <div class="stat-label">embodiments retargeted</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">2<sub>real</sub></div>
+      <div class="stat-label">real platforms (Franka FR3 · LEAP hand)</div>
+    </div>
+  </div>
+  <p class="np-lead" style="font-family:inherit;font-style:normal;color:var(--ink-2);font-size:14px;">Scale is currently bounded by Action100M (14.6 years of footage across 147M action segments); the engine itself is corpus-agnostic. The interactive demo hosts a curated subset of <strong>106</strong> processed clips.</p>
+</section>
+
+<!-- ───────────────────────────── PIPELINE ──────────────────────────────── -->
+<section class="np-section" id="pipeline">
+  <div class="np-head">
+    <div class="section-num">02 / Pipeline</div>
+    <h2 class="section-title">The data engine</h2>
+  </div>
+  <p class="lead np-lead">A modular pipeline that lifts monocular RGB video into a metric, agent-agnostic 4D hand-object representation.</p>
+
+  <figure class="media">
+    <img class="media-fig" src="media/pipeline.jpg" alt="EgoInfinity pipeline schematic (Fig. 1)" />
+    <figcaption style="text-align:center;"><b>Engine overview.</b> From filtered clips and text descriptions, the engine recovers metric hand trajectories and object geometry and pose for automatically discovered objects; an interaction-aware refinement stage aligns hand and object motion and suppresses drift.</figcaption>
+  </figure>
+
+  <p class="prose" style="margin-top: 26px;">A lightweight <strong>two-pass</strong> strategy keeps web-scale processing tractable. Pass 1 scans for hand-present segments and filters clips by hand-motion statistics and camera-motion stability. Pass 2 runs the full reconstruction stack only on the retained active segments. EgoInfinity currently targets approximately static-camera footage, common in tutorial and how-to content.</p>
+
+  <div class="pipeline-group">
+    <div class="pg-title">Metric geometry &amp; calibration</div>
+    <div class="stage-grid">
+      <div class="stage-card">
+        <div class="sc-model">MoGe-2</div>
+        <div class="sc-role">Camera focal length and global metric scale: the metric anchor that the hand and object predictions are then calibrated into.</div>
+        <div class="sc-tag">monocular metric geometry</div>
+      </div>
+      <div class="stage-card">
+        <div class="sc-model">Flow3r</div>
+        <div class="sc-role">Dense per-frame depth for back-projection, temporally aligned against a static-background template.</div>
+        <div class="sc-tag">dense depth</div>
+      </div>
+      <div class="stage-card">
+        <div class="sc-model">GeoCalib</div>
+        <div class="sc-role">Single-image gravity direction, giving an up-axis shared by hands, objects, and the ego view.</div>
+        <div class="sc-tag">gravity / camera calibration</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pipeline-group">
+    <div class="pg-title">Hand reconstruction</div>
+    <div class="stage-grid">
+      <div class="stage-card">
+        <div class="sc-model">WiLoR</div>
+        <div class="sc-role">Per-frame MANO hand parameters (21 joints, 778 vertices); the MANO root is rescaled into metric units against the depth.</div>
+        <div class="sc-tag">RGB hand reconstruction</div>
+      </div>
+      <div class="stage-card">
+        <div class="sc-model">HaWoR infiller</div>
+        <div class="sc-role">A ~35M-parameter Transformer (HaWoR) completes missing or unstable hand frames; biomechanical limits and quaternion-space smoothing remove jitter.</div>
+        <div class="sc-tag">infill + smoothing</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pipeline-group">
+    <div class="pg-title">Object discovery, reconstruction &amp; tracking</div>
+    <div class="stage-grid">
+      <div class="stage-card">
+        <div class="sc-model">SAM 3</div>
+        <div class="sc-role">Open-vocabulary detection driven by the clip's text description, so the manipulated object is found without manual annotation.</div>
+        <div class="sc-tag">concept detection</div>
+      </div>
+      <div class="stage-card">
+        <div class="sc-model">SAM 2</div>
+        <div class="sc-role">Streaming mask track (forward and backward) over the full clip; masks are lifted with depth to per-frame point clouds.</div>
+        <div class="sc-tag">segmentation / tracking</div>
+      </div>
+      <div class="stage-card">
+        <div class="sc-model">SAM 3D Objects</div>
+        <div class="sc-role">Canonical object mesh from the cleanest unoccluded frame, with a canonical orientation and metric scale.</div>
+        <div class="sc-tag">object reconstruction</div>
+      </div>
+      <div class="stage-card">
+        <div class="sc-model">FoundationPose++</div>
+        <div class="sc-role">6-DoF object pose trajectory in the same metric frame as the hands, with stabilization for weakly observed frames.</div>
+        <div class="sc-tag">6-DoF pose tracking</div>
+      </div>
+      <div class="stage-card">
+        <div class="sc-model">MEMFOF</div>
+        <div class="sc-role">Dense optical flow used to separate static-background from dynamic pixels and to classify per-frame interaction state.</div>
+        <div class="sc-tag">optical flow</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout np-narrow">
+    <h4>Not a naive stack: cross-module calibration + interaction-aware refinement</h4>
+    <p>Hand and object predictions come from different models and are not inherently aligned in scale or reference frame. EgoInfinity calibrates them into a shared metric camera frame, then refines object motion using detected interaction states. Each frame is classified as <strong>static</strong>, <strong>grasped</strong>, or <strong>moving</strong> (a finer six-state label is used internally): a grasped object is rigidly bound to the hand frame, a static object is locked to its robust point-cloud centroid, and a moving object keeps its smoothed per-frame proposal. Lightweight sanity checks suppress implausible scales and flag spurious background detections. This is what cuts the drift and contact inconsistency seen in pure visual tracking.</p>
+  </div>
+
+  <p class="prose" style="margin-top: 24px; text-align:center;">The engine output is a metric, agent-agnostic 4D hand-object interaction state, scrubbable along the timeline and ready for downstream retargeting and learning:</p>
+  <div class="io-chips" style="justify-content:center;">
+    <span class="io-chip"><b>hand mesh</b> M<sup>h</sup></span>
+    <span class="io-chip"><b>hand keypoints</b> K<sup>h</sup></span>
+    <span class="io-chip"><b>hand pose</b> SE(3)</span>
+    <span class="io-chip"><b>object point cloud</b> P<sup>o</sup></span>
+    <span class="io-chip"><b>object mesh</b> M<sup>o</sup></span>
+    <span class="io-chip"><b>object 6-DoF pose</b></span>
+    <span class="io-chip"><b>interaction state</b></span>
+  </div>
+
+  <div class="callout np-narrow">
+    <h4>Egocentric view synthesis: the engine's namesake</h4>
+    <p>The exo-to-ego conversion is a rigid reframing of the recovered 3D scene, not a 2D generative translation, so it never hallucinates pixels. A virtual ego camera is placed above the bilateral hand midpoint, its up-axis set to the gravity vector and aimed at the interaction region, following it frame by frame. Source clips that share no common capture viewpoint are thus unified into a consistent egocentric observation while metric geometry and contact are preserved exactly.</p>
+  </div>
+</section>
+
+<!-- ───────────────────────────── RETARGETING ───────────────────────────── -->
+<section class="np-section" id="retargeting">
+  <div class="np-head">
+    <div class="section-num">03 / Method</div>
+    <h2 class="section-title">Cross-embodiment retargeting</h2>
+  </div>
+  <p class="lead np-lead">Functional transfer: preserve task-relevant hand motion within a robot's constraints, without copying human arm or body kinematics.</p>
+
+  <figure class="media" style="margin-bottom:28px;">
+      <img class="media-fig" src="media/retarget.jpg" alt="Cross-embodiment retargeting (Fig. 2 / 7)" />
+      <figcaption><b>Root-frame estimator.</b> Recovered 3D hand trajectories and gravity feed a simulation-trained, robot-specific root estimator; the best candidate root frame is selected, and motion is retargeted through IK and post-optimization.</figcaption>
+    </figure>
+
+    <div class="prose">
+      <p>Arbitrary internet videos often show only the hands, partial arms, or changing viewpoints, so exact body-pose recovery is unreliable. Instead of imitating kinematics, EgoInfinity estimates a feasible <strong>robot-specific root transformation</strong> and preserves task-relevant hand motion within the target robot's limits.</p>
+      <p>A <strong>SE(3)-equivariant</strong> estimator built from Vector Neuron layers predicts the root frame so that rigidly transforming the input transforms the prediction accordingly. It is formulated as a <strong>flow-matching</strong> generator over plausible root frames, capturing the ambiguity of partial-body observations, and is trained <strong>entirely in MuJoCo simulation</strong> per robot (about 1.5 to 2 hours each on a single RTX 3060), with augmentations for tracking noise, occlusion, gravity dropout, and rear-facing cameras.</p>
+      <p>At inference, sliding-window hypotheses are clustered into K=5 representative candidates under an SE(3) geodesic metric, then scored by IK convergence, residual tracking error, manipulability, joint-limit margin, and smoothness. The best candidate anchors a smoothed per-frame root trajectory; arm joints follow wrist-level IK targets while finger joints are mapped directly from MANO keypoints for dexterous hands.</p>
+    </div>
+</section>
+
+<!-- ───────────────────────────── EXPERIMENTS ───────────────────────────── -->
+<section class="np-section" id="experiments">
+  <div class="np-head">
+    <div class="section-num">04 / Validation</div>
+    <h2 class="section-title">Experiments</h2>
+  </div>
+
+  <h3 class="np-subhead">Cross-embodiment retargeting</h3>
+  <p class="prose" style="margin-bottom:20px;">For each robot, the retargeter estimates a root transformation and solves IK to convert recovered 3D hand motion into executable joint trajectories under the robot's kinematic constraints. Dataset-level statistics:</p>
+
+  <div class="paper-table-wrap">
+    <table class="paper-table">
+      <thead>
+        <tr>
+          <th>Robot</th>
+          <th>IK rate</th>
+          <th>Pos. error</th>
+          <th>Ori. error</th>
+          <th>Jnt.-limit margin</th>
+          <th>Manipulability</th>
+          <th>Smoothness</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Unitree G1</td><td>0.821</td><td>2.86 cm</td><td>6.73°</td><td>0.619 rad</td><td>0.012</td><td>0.00693</td></tr>
+        <tr><td>Robonaut2</td><td>0.774</td><td>6.67 cm</td><td>8.25°</td><td>0.134 rad</td><td>0.058</td><td>0.00343</td></tr>
+        <tr><td>Dual-Franka</td><td>0.706</td><td>10.27 cm</td><td>12.17°</td><td>0.572 rad</td><td>0.080</td><td>0.00582</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="table-note">IK rate: per-frame IK success rate. Pos. / Ori. error: mean hand position (L2, cm) and orientation (geodesic, °) between IK target and achieved pose. Jnt.-limit margin: mean minimum joint clearance (rad). Manipulability: mean index sqrt(det(J Jᵀ)). Smoothness: mean squared joint velocity. A single recovered 4D trajectory also compiles onto XLeRobot in simulation.</p>
+
+  <h3 class="np-subhead">Real-robot skill execution</h3>
+  <p class="prose" style="margin-bottom:18px;">Retargeted motions are replayed on a real dual-arm Franka FR3, demonstrating functional execution across distinct manipulation tasks.</p>
+  <div class="media-grid">
+    <div class="media-cell"><video src="media/cut.mp4" autoplay muted loop playsinline></video><div class="ph-cap">Cut</div></div>
+    <div class="media-cell"><video src="media/pour_bowl.mp4" autoplay muted loop playsinline></video><div class="ph-cap">Pour bowl</div></div>
+    <div class="media-cell"><video src="media/pour_glass.mp4" autoplay muted loop playsinline></video><div class="ph-cap">Pour glass</div></div>
+    <div class="media-cell"><video src="media/swipe_box.mp4" autoplay muted loop playsinline></video><div class="ph-cap">Wipe box</div></div>
+    <div class="media-cell"><video src="media/swipe_computer.mp4" autoplay muted loop playsinline></video><div class="ph-cap">Wipe computer</div></div>
+  </div>
+
+  <h3 class="np-subhead">Downstream grasping policy</h3>
+  <p class="prose" style="margin-bottom:18px;">Beyond direct replay, EgoInfinity-extracted hand motions serve as priors to train a grasping policy on a real LEAP dexterous hand, generalizing across object shape.</p>
+  <figure class="media">
+    <video class="media-fig" src="media/pick.mp4" autoplay muted loop playsinline></video>
+    <figcaption style="text-align:center;">Left to right: apple, banana, tomato can.</figcaption>
+  </figure>
+</section>
+
+<!-- ───────────────────────────── LIMITATIONS ───────────────────────────── -->
+<section class="np-section" id="limitations">
+  <div class="np-head">
+    <div class="section-num">05 / Scope</div>
+    <h2 class="section-title">Limitations</h2>
+  </div>
+  <ul class="lim-list np-narrow">
+    <li><strong>Approximately static camera.</strong> EgoInfinity excludes body-mounted or hand-held footage, which keeps web-scale processing tractable and avoids online SLAM but limits corpus diversity. The modular design can adopt SLAM-aware depth as those models mature.</li>
+    <li><strong>Coarse contact.</strong> Interaction-aware refinement gives grasp detection and spatially correlated hand-object motion, but does not guarantee exact fingertip placement, force consistency, or no-slip constraints, and provides no tactile observations.</li>
+    <li><strong>Robot-specific, functional retargeting.</strong> The retargeter may need retraining or calibration for a new robot and targets functional motion transfer rather than fine-grained kinematic imitation.</li>
+  </ul>
+</section>
+
+<!-- ───────────────────────────── BIBTEX ────────────────────────────────── -->
+<section class="np-section" id="bibtex">
+  <div class="np-head">
+    <div class="section-num">06 / BibTeX</div>
+    <h2 class="section-title">Citation</h2>
+  </div>
+  <pre class="stats-bibtex">@article{wang2026egoinfinity,
+  title   = {EgoInfinity: A Web-Scale 4D Hand-Object Interaction Data Engine
+             for Any-View Robot Retargeting and Video-to-Action Robot Learning},
+  author  = {Wang, Gaotian and Ren, Kejia and Morgan, Andrew and Chen, Yiting
+             and Qian, Howard H. and Chanrungmaneekul, Podshara and Hang, Kaiyu},
+  journal = {arXiv preprint arXiv:2606.17385},
+  year    = {2026}
+}</pre>
+  <p class="np-lead" style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-3);margin-top:14px;">If you use these statistics, please also cite <a href="https://arxiv.org/abs/2601.10592" target="_blank" rel="noopener" style="color:var(--accent-ink);">Action100M</a>, the source corpus.</p>
+</section>
+
+<footer>
+  <span>EGOINFINITY · method &amp; experiments · 2026</span>
+  <span><a href="https://huggingface.co/spaces/Rice-RobotPI-Lab/EgoInfinity" target="_blank" rel="noopener" style="color:var(--ink-2);text-decoration:none;">interactive demo ↗</a></span>
+</footer>
+<div class="np-credit">
+  Page layout adapted from the <a href="https://github.com/nerfies/nerfies.github.io" target="_blank" rel="noopener">Nerfies</a> project page, skinned with the EgoInfinity theme. Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>.
+</div>
+
+<script>
+  // Standalone theme cycle (shares the 'dsv-theme' key with the main page).
+  (function () {
+    var saved = localStorage.getItem('dsv-theme') || 'noir';
+    document.body.dataset.theme = saved;
+    document.getElementById('theme-btn').addEventListener('click', function () {
+      var cycle = ['paper', 'noir', 'ink'];
+      var idx = (cycle.indexOf(document.body.dataset.theme) + 1) % cycle.length;
+      document.body.dataset.theme = cycle[idx];
+      localStorage.setItem('dsv-theme', cycle[idx]);
+    });
+  })();
+</script>
+
+</body>
+</html>
